@@ -15,8 +15,8 @@
 
 ### 3. ERD
 
-ERD는 [여기](./ERD_SPEC.md)에서 확인할 수 있습니다.
+ERD는 [여기](docs/erdSpec.md)에서 확인할 수 있습니다.
 
 ### 4. API 명세서
 
-API 명세서는 [여기](./API_SPEC.md)에서 확인할 수 있습니다.
+API 명세서는 [여기](docs/apiSpec.md)에서 확인할 수 있습니다.

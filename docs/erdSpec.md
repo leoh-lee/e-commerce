@@ -1,6 +1,6 @@
 # e-commerce 서비스 ERD
 
-![ERD](./erd.png)
+![ERD](assets/images/erd.png)
 - 테이블 목록
     - 사용자
     - 상품
