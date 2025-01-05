@@ -2,6 +2,7 @@ package kr.hhplus.be.server.interfaces.api.order;
 
 import kr.hhplus.be.server.interfaces.api.order.request.OrderRequest;
 import kr.hhplus.be.server.interfaces.api.order.response.OrderProductsResponse;
+import kr.hhplus.be.server.interfaces.api.order.response.OrderResponse;
 import kr.hhplus.be.server.interfaces.api.order.response.OrderSearchResponse;
 import kr.hhplus.be.server.support.http.response.ApiResponse;
 import kr.hhplus.be.server.support.http.response.ResponseCode;

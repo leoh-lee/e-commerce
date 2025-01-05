@@ -1,6 +1,4 @@
-package kr.hhplus.be.server.interfaces.api.order;
-
-import kr.hhplus.be.server.interfaces.api.order.response.OrderProductsResponse;
+package kr.hhplus.be.server.interfaces.api.order.response;
 
 import java.util.List;
 
