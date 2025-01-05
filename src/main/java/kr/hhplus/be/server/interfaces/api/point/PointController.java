@@ -1,12 +1,13 @@
 package kr.hhplus.be.server.interfaces.api.point;
 
+import jakarta.validation.Valid;
+import kr.hhplus.be.server.interfaces.api.point.request.PointChargeRequest;
+import kr.hhplus.be.server.interfaces.api.point.response.PointChargeResponse;
+import kr.hhplus.be.server.interfaces.api.point.response.PointSearchResponse;
 import kr.hhplus.be.server.support.http.response.ApiResponse;
 import kr.hhplus.be.server.support.http.response.ResponseCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/points")
@@ -14,19 +15,15 @@ import java.util.Map;
 public class PointController {
 
     @PostMapping
-    public ApiResponse<Map<String, Object>> chargePoint(@RequestBody Map<String, String> requestBody) {
-        Map<String, Object> result = new HashMap<>();
-        result.put("userId", 1L);
-        result.put("amount", 10_000);
+    public ApiResponse<PointChargeResponse> chargePoint(@Valid @RequestBody PointChargeRequest pointChargeRequest) {
+        PointChargeResponse result = new PointChargeResponse(1L, 10_000);
 
         return ApiResponse.ok(result, ResponseCode.SUCCESS_CHARGE_POINT);
     }
 
     @GetMapping("/{userId}")
-    public ApiResponse<Map<String, Object>> searchPoint(@PathVariable Long userId) {
-        Map<String, Object> result = new HashMap<>();
-        result.put("userId", 1L);
-        result.put("balance", 10_000);
+    public ApiResponse<PointSearchResponse> searchPoint(@PathVariable Long userId) {
+        PointSearchResponse result = new PointSearchResponse(userId, 10_000);
 
         return ApiResponse.ok(result, ResponseCode.SUCCESS_SEARCH_USER_POINT);
     }
