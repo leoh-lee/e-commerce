@@ -15,9 +15,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/orders")
-public class OrderController {
+public class OrderController implements OrderApi {
 
-    @PostMapping
+    @Override
     public ApiResponse<OrderResponse> order(@RequestBody OrderRequest orderRequest) {
 
         List<OrderProductsResponse> orderProducts = List.of(
@@ -40,7 +40,7 @@ public class OrderController {
         return ApiResponse.ok(result, ResponseCode.SUCCESS_ORDER);
     }
 
-    @GetMapping
+    @Override
     public ApiResponse<PageResponse<OrderSearchResponse>> searchOrders(@RequestParam Long userId) {
 
         List<OrderProductsResponse> orderProducts = List.of(

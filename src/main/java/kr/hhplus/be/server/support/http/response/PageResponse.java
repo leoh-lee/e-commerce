@@ -1,9 +1,11 @@
 package kr.hhplus.be.server.support.http.response;
 
+import lombok.Getter;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
 
+@Getter
 public class PageResponse<T> {
     private List<T> items;
     private int currentPage;

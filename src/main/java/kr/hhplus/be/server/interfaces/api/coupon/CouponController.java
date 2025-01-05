@@ -15,9 +15,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/coupons")
-public class CouponController {
+public class CouponController implements CouponApi {
 
-    @PostMapping
+    @Override
     public ApiResponse<CouponIssueResponse> issueCoupon(@RequestBody CouponIssueRequest couponIssueRequest) {
 
         CouponIssueResponse result = new CouponIssueResponse(1L, "10% 할인 쿠폰", "PERCENTAGE", null, 10 );
@@ -25,7 +25,7 @@ public class CouponController {
         return ApiResponse.ok(result, ResponseCode.SUCCESS_ISSUE_COUPON);
     }
 
-    @GetMapping
+    @Override
     public ApiResponse<PageResponse<UserCouponSearchResponse>> searchUserCoupons(@RequestParam Long userId) {
 
         List<UserCouponSearchResponse> result = List.of(
@@ -38,7 +38,7 @@ public class CouponController {
         return ApiResponse.ok(new PageResponse<>(pageResult), ResponseCode.SUCCESS_SEARCH_USER_COUPON);
     }
 
-    @GetMapping("/available")
+    @Override
     public ApiResponse<PageResponse<AvailableCouponResponse>> searchAvailableCoupons() {
 
         List<AvailableCouponResponse> result = List.of(

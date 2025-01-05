@@ -14,14 +14,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/payments")
-public class PaymentController {
+public class PaymentController implements PaymentApi {
 
-    @PostMapping
+    @Override
     public ApiResponse<Void> payment(@RequestBody PaymentRequest requestBody) {
         return ApiResponse.ok(ResponseCode.SUCCESS_PAYMENT);
     }
 
-    @GetMapping
+    @Override
     public ApiResponse<PageResponse<PaymentSearchResponse>> searchPayments(PaymentSearchRequest paymentSearchRequest) {
 
         List<PaymentSearchResponse> result = List.of(

@@ -8,7 +8,6 @@ import kr.hhplus.be.server.support.http.response.ResponseCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,9 +16,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/products")
 @RequiredArgsConstructor
-public class ProductController {
+public class ProductController implements ProductApi {
 
-    @GetMapping
+    @Override
     public ApiResponse<PageResponse<ProductSearchResponse>> searchProducts() {
 
         List<ProductSearchResponse> result = List.of(
@@ -32,7 +31,7 @@ public class ProductController {
         return ApiResponse.ok(new PageResponse<>(pageResult), ResponseCode.SUCCESS_SEARCH_USER_POINT);
     }
 
-    @GetMapping("/top")
+    @Override
     public ApiResponse<List<ProductTop5OrderResponse>> searchProductsTop5() {
 
         List<ProductTop5OrderResponse> result = List.of(
