@@ -22,6 +22,12 @@ spring:
       hibernate.jdbc.time_zone: UTC
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
+springdoc:
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  swagger-ui:
+    display-request-duration: true      # Tryout 시 요청에 걸린 시간 출력
+    operations-sorter: method           # Http Method 기준으로 정렬
 ---
 spring.config.activate.on-profile: local, test
 
@@ -30,3 +36,7 @@ spring:
     url: jdbc:mysql://localhost:3307/hhplus?characterEncoding=UTF-8&serverTimezone=UTC
     username: application
     password: application
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
