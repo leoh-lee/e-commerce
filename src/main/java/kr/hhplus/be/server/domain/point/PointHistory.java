@@ -3,10 +3,14 @@ package kr.hhplus.be.server.domain.point;
 import jakarta.persistence.*;
 import kr.hhplus.be.server.domain.common.BaseEntity;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class PointHistory extends BaseEntity {
 
     @Id
@@ -24,4 +28,9 @@ public class PointHistory extends BaseEntity {
     @Column(nullable = false)
     private int amount;
 
+    public PointHistory(Point point, PointTransactionType transactionType, int amount) {
+        this.point = point;
+        this.transactionType = transactionType;
+        this.amount = amount;
+    }
 }
