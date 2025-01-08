@@ -1,5 +1,9 @@
 package kr.hhplus.be.server.domain.point;
 
+import kr.hhplus.be.server.domain.point.dto.PointChargeResult;
+import kr.hhplus.be.server.domain.point.dto.PointHistorySearchResult;
+import kr.hhplus.be.server.domain.point.dto.PointSearchResult;
+import kr.hhplus.be.server.domain.point.dto.PointUseResult;
 import kr.hhplus.be.server.domain.point.exception.PointNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

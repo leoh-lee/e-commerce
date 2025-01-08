@@ -1,4 +1,7 @@
-package kr.hhplus.be.server.domain.product;
+package kr.hhplus.be.server.domain.product.dto;
+
+import kr.hhplus.be.server.domain.product.Product;
+import kr.hhplus.be.server.domain.product.ProductStock;
 
 public record ProductSearchResult(
         Long id,

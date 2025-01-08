@@ -5,7 +5,7 @@ import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import kr.hhplus.be.server.domain.product.Product;
 import kr.hhplus.be.server.domain.product.ProductRepository;
-import kr.hhplus.be.server.domain.product.ProductSearchDto;
+import kr.hhplus.be.server.domain.product.dto.ProductSearchDto;
 import kr.hhplus.be.server.domain.product.QProduct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

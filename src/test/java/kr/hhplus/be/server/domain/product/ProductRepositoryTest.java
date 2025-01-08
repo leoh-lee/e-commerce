@@ -2,6 +2,7 @@ package kr.hhplus.be.server.domain.product;
 
 import jakarta.persistence.EntityManager;
 import kr.hhplus.be.server.config.jpa.QueryDslConfig;
+import kr.hhplus.be.server.domain.product.dto.ProductSearchDto;
 import kr.hhplus.be.server.infrastructures.core.product.ProductRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

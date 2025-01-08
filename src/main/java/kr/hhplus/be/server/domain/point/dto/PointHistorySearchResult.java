@@ -1,4 +1,7 @@
-package kr.hhplus.be.server.domain.point;
+package kr.hhplus.be.server.domain.point.dto;
+
+import kr.hhplus.be.server.domain.point.PointHistory;
+import kr.hhplus.be.server.domain.point.PointTransactionType;
 
 public record PointHistorySearchResult(
         Long id,

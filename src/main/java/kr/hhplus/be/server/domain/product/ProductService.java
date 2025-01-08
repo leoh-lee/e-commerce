@@ -1,5 +1,7 @@
 package kr.hhplus.be.server.domain.product;
 
+import kr.hhplus.be.server.domain.product.dto.ProductSearchDto;
+import kr.hhplus.be.server.domain.product.dto.ProductSearchResult;
 import kr.hhplus.be.server.domain.product.exception.ProductNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

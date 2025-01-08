@@ -1,5 +1,6 @@
-package kr.hhplus.be.server.domain.point;
+package kr.hhplus.be.server.domain.point.dto;
 
+import kr.hhplus.be.server.domain.point.Point;
 import kr.hhplus.be.server.domain.user.User;
 
 public record PointSearchResult(
