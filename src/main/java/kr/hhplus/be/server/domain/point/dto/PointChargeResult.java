@@ -9,7 +9,7 @@ public record PointChargeResult(
 ) {
 
     public static PointChargeResult fromEntity(Point point) {
-        return new PointChargeResult(point.getId(), point.getUser().getId(), point.getBalance());
+        return new PointChargeResult(point.getId(), point.getUserId(), point.getBalance());
     }
 
 }

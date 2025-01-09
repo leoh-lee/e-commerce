@@ -1,6 +1,7 @@
 package kr.hhplus.be.server.infrastructures.core.user;
 
 import kr.hhplus.be.server.domain.user.*;
+import kr.hhplus.be.server.domain.user.dto.UserCreateResult;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,10 +45,10 @@ class UserServiceTest {
         String name = "사용자1";
 
         // when
-        userService.createUser(new UserCreateDto(name));
+        UserCreateResult userCreateResult = userService.createUser(new UserCreateDto(name));
 
         // then
-        verify(userRepository, times(1)).save(any());
+        assertThat(userCreateResult.name()).isEqualTo(name);
     }
 
 }

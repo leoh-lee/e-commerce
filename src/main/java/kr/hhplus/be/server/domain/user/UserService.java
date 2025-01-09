@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.domain.user;
 
+import kr.hhplus.be.server.domain.user.dto.UserCreateResult;
 import kr.hhplus.be.server.domain.user.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,10 +15,12 @@ public class UserService {
         return UserSearchResult.fromEntity(userRepository.findById(userId).orElseThrow(UserNotFoundException::new));
     }
 
-    public void createUser(UserCreateDto userCreateDto) {
+    public UserCreateResult createUser(UserCreateDto userCreateDto) {
         User user = new User(userCreateDto.name());
 
         userRepository.save(user);
+
+        return UserCreateResult.fromEntity(user);
     }
 
 }
