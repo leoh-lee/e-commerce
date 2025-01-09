@@ -20,3 +20,8 @@ ERD는 [여기](docs/erdSpec.md)에서 확인할 수 있습니다.
 ### 4. API 명세서
 
 API 명세서는 [여기](docs/apiSpec.md)에서 확인할 수 있습니다.
+
+## Swagger UI 캡쳐본
+![swagger ui](docs/assets/images/swagger_ui.png)
+
+자세한 명세는 [Swagger Hub](https://app.swaggerhub.com/apis/SPAKERS38/e-commerce/1.0.0)에서 확인하실 수 있습니다.

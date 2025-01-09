@@ -5,16 +5,19 @@ import kr.hhplus.be.server.interfaces.api.order.response.OrderProductsResponse;
 import kr.hhplus.be.server.interfaces.api.order.response.OrderResponse;
 import kr.hhplus.be.server.interfaces.api.order.response.OrderSearchResponse;
 import kr.hhplus.be.server.support.http.response.ApiResponse;
+import kr.hhplus.be.server.support.http.response.PageResponse;
 import kr.hhplus.be.server.support.http.response.ResponseCode;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/orders")
-public class OrderController {
+public class OrderController implements OrderApi {
 
-    @PostMapping
+    @Override
     public ApiResponse<OrderResponse> order(@RequestBody OrderRequest orderRequest) {
 
         List<OrderProductsResponse> orderProducts = List.of(
@@ -37,8 +40,8 @@ public class OrderController {
         return ApiResponse.ok(result, ResponseCode.SUCCESS_ORDER);
     }
 
-    @GetMapping
-    public ApiResponse<List<OrderSearchResponse>> searchOrders(@RequestParam Long userId) {
+    @Override
+    public ApiResponse<PageResponse<OrderSearchResponse>> searchOrders(@RequestParam Long userId) {
 
         List<OrderProductsResponse> orderProducts = List.of(
                 new OrderProductsResponse(1L, 1),
@@ -68,6 +71,8 @@ public class OrderController {
                 )
         );
 
-        return ApiResponse.ok(result, ResponseCode.SUCCESS_SEARCH_ORDERS);
+        Page<OrderSearchResponse> pageResult = new PageImpl<>(result);
+
+        return ApiResponse.ok(new PageResponse<>(pageResult), ResponseCode.SUCCESS_SEARCH_ORDERS);
     }
 }

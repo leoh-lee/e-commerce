@@ -4,22 +4,25 @@ import kr.hhplus.be.server.interfaces.api.payment.request.PaymentRequest;
 import kr.hhplus.be.server.interfaces.api.payment.request.PaymentSearchRequest;
 import kr.hhplus.be.server.interfaces.api.payment.response.PaymentSearchResponse;
 import kr.hhplus.be.server.support.http.response.ApiResponse;
+import kr.hhplus.be.server.support.http.response.PageResponse;
 import kr.hhplus.be.server.support.http.response.ResponseCode;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/payments")
-public class PaymentController {
+public class PaymentController implements PaymentApi {
 
-    @PostMapping
+    @Override
     public ApiResponse<Void> payment(@RequestBody PaymentRequest requestBody) {
         return ApiResponse.ok(ResponseCode.SUCCESS_PAYMENT);
     }
 
-    @GetMapping
-    public ApiResponse<List<PaymentSearchResponse>> searchPayments(PaymentSearchRequest paymentSearchRequest) {
+    @Override
+    public ApiResponse<PageResponse<PaymentSearchResponse>> searchPayments(PaymentSearchRequest paymentSearchRequest) {
 
         List<PaymentSearchResponse> result = List.of(
                 new PaymentSearchResponse(
@@ -44,7 +47,9 @@ public class PaymentController {
                 )
         );
 
-        return ApiResponse.ok(result, ResponseCode.SUCCESS_SEARCH_PAYMENT);
+        Page<PaymentSearchResponse> pageResult = new PageImpl<>(result);
+
+        return ApiResponse.ok(new PageResponse<>(pageResult), ResponseCode.SUCCESS_SEARCH_PAYMENT);
     }
 
 }

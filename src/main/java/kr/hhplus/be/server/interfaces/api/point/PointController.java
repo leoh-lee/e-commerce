@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.interfaces.api.point;
 
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import kr.hhplus.be.server.interfaces.api.point.request.PointChargeRequest;
 import kr.hhplus.be.server.interfaces.api.point.response.PointChargeResponse;
@@ -12,16 +13,16 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/points")
 @RequiredArgsConstructor
-public class PointController {
+public class PointController implements PointApi {
 
-    @PostMapping
+    @Override
     public ApiResponse<PointChargeResponse> chargePoint(@Valid @RequestBody PointChargeRequest pointChargeRequest) {
         PointChargeResponse result = new PointChargeResponse(1L, 10_000);
 
         return ApiResponse.ok(result, ResponseCode.SUCCESS_CHARGE_POINT);
     }
 
-    @GetMapping("/{userId}")
+    @Override
     public ApiResponse<PointSearchResponse> searchPoint(@PathVariable Long userId) {
         PointSearchResponse result = new PointSearchResponse(userId, 10_000);
 
