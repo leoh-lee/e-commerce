@@ -1,9 +1,6 @@
 package kr.hhplus.be.server.infrastructures.core.user;
 
-import kr.hhplus.be.server.domain.user.User;
-import kr.hhplus.be.server.domain.user.UserRepository;
-import kr.hhplus.be.server.domain.user.UserSearchResult;
-import kr.hhplus.be.server.domain.user.UserService;
+import kr.hhplus.be.server.domain.user.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,7 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
@@ -38,6 +35,19 @@ class UserServiceTest {
 
         // then
         assertThat(result.id()).isEqualTo(userId);
+    }
+
+    @Test
+    @DisplayName("사용자를 저장한다.")
+    void createUser_success() {
+        // given
+        String name = "사용자1";
+
+        // when
+        userService.createUser(new UserCreateDto(name));
+
+        // then
+        verify(userRepository, times(1)).save(any());
     }
 
 }

@@ -14,4 +14,10 @@ public class UserService {
         return UserSearchResult.fromEntity(userRepository.findById(userId).orElseThrow(UserNotFoundException::new));
     }
 
+    public void createUser(UserCreateDto userCreateDto) {
+        User user = new User(userCreateDto.name());
+
+        userRepository.save(user);
+    }
+
 }
