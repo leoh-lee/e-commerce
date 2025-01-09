@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotNull;
 public record PointChargeRequest(
         @NotNull
         Long userId,
-
         int amount
 ) {
 }
