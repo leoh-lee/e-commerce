@@ -18,8 +18,7 @@ class PointTest {
         int balance = 100_000;
         long userId = 1L;
 
-        User user = new User(userId, "testUser");
-        Point point = new Point(1L, user, balance);
+        Point point = new Point(1L, userId, balance);
 
         // when // then
         assertThatThrownBy(() -> point.usePoint(amount))
@@ -34,8 +33,7 @@ class PointTest {
         int balance = 100_000;
         long userId = 1L;
 
-        User user = new User(userId, "testUser");
-        Point point = new Point(1L, user, balance);
+        Point point = new Point(1L, userId, balance);
 
         // when
         point.usePoint(amount);
@@ -52,8 +50,7 @@ class PointTest {
         int chargeAmount = 200_000;
         long userId = 1L;
 
-        User user = new User(userId, "testUser");
-        Point point = new Point(1L, user, balance);
+        Point point = new Point(1L, userId, balance);
 
         // when // then
         assertThatThrownBy(() -> point.chargePoint(chargeAmount))
@@ -68,8 +65,7 @@ class PointTest {
         int chargeAmount = 100_000;
         long userId = 1L;
 
-        User user = new User(userId, "testUser");
-        Point point = new Point(1L, user, balance);
+        Point point = new Point(1L, userId, balance);
 
         // when
         point.chargePoint(chargeAmount);

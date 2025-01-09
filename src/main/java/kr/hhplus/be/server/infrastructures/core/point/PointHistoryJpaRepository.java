@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface PointHistoryJpaRepository extends JpaRepository<PointHistory, Long> {
 
-    @Query(value = "select ph from PointHistory ph join fetch ph.point p join fetch p.user u where u.id = :userId")
+    @Query(value = "select ph from PointHistory ph join fetch ph.point p where ph.point.userId = :userId")
     Page<PointHistory> findByUserId(long userId, Pageable pageable);
 
 }

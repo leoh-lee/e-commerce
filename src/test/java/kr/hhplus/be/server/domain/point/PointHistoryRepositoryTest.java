@@ -35,7 +35,7 @@ class PointHistoryRepositoryTest {
         User user = new User("testUser");
         em.persist(user);
 
-        Point point = new Point(user, 0);
+        Point point = new Point(user.getId(), 0);
         em.persist(point);
 
         for (int i = 0; i < 5; i++) {
