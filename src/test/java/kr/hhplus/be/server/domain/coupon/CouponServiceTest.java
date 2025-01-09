@@ -48,12 +48,8 @@ class CouponServiceTest {
 
         String couponName = "10% 할인 쿠폰";
 
-        CouponInfo couponInfo = new CouponInfo(couponName, CouponType.PERCENTAGE, 10);
-        DiscountInfo discountInfo = new DiscountInfo(null, 10);
-        CouponUsableDate couponUsableDate = new CouponUsableDate(now.minusDays(1), now.plusDays(1));
-
-        Coupon coupon1 = new Coupon(1L, couponInfo, discountInfo, couponUsableDate);
-        Coupon coupon2 = new Coupon(2L, couponInfo, discountInfo, couponUsableDate);
+        Coupon coupon1 = createCoupon(1L, couponName, CouponType.PERCENTAGE);
+        Coupon coupon2 = createCoupon(2L, "10,000원 할인 쿠폰", CouponType.FIXED);
 
         List<Coupon> coupons = List.of(
                 coupon1,
@@ -105,7 +101,7 @@ class CouponServiceTest {
         when(couponRepository.findById(couponId)).thenReturn(Optional.of(coupon));
 
         // when
-        CouponSearchResult result = couponService.getCouponById(1L);
+        CouponSearchResult result = couponService.getCouponById(couponId);
 
         // then
         assertThat(result.couponName()).isEqualTo(couponName);
@@ -120,7 +116,7 @@ class CouponServiceTest {
 
         // when
         // then
-        assertThatThrownBy(() -> couponService.issueCoupon(1L, 1L))
+        assertThatThrownBy(() -> couponService.issueCoupon(1L, couponId))
                 .isInstanceOf(CouponNotFoundException.class);
     }
 
@@ -129,7 +125,7 @@ class CouponServiceTest {
     void issueCoupon_thenCouponStockDecreased() {
         // given
         long couponId = 1L;
-        Coupon coupon = createCoupon("10% 할인쿠폰", CouponType.PERCENTAGE);
+        Coupon coupon = createCoupon(couponId, "10% 할인쿠폰", CouponType.PERCENTAGE);
         int originalCouponStock = coupon.getCouponInfo().getCouponStock();
         when(couponRepository.findById(couponId)).thenReturn(Optional.of(coupon));
         when(dateTimeProvider.getLocalDateTimeNow()).thenReturn(LocalDateTime.now());
@@ -146,7 +142,7 @@ class CouponServiceTest {
     void issueCoupon_whenAlreadyIssuedCoupon_throwsAlreadyIssuedCouponException() {
         // given
         long couponId = 1L;
-        Coupon coupon = createCoupon("10% 할인쿠폰", CouponType.PERCENTAGE);
+        Coupon coupon = createCoupon(couponId,"10% 할인쿠폰", CouponType.PERCENTAGE);
 
         when(couponRepository.findById(couponId)).thenReturn(Optional.of(coupon));
         when(dateTimeProvider.getLocalDateTimeNow()).thenReturn(LocalDateTime.now());
@@ -164,8 +160,10 @@ class CouponServiceTest {
         // given
         LocalDateTime now = LocalDateTime.now();
 
-        UserCoupon userCoupon = new UserCoupon(1L, 1L, UserCouponStatus.ISSUED, now, null);
-        UserCouponDto userCouponDto = new UserCouponDto(userCoupon, createCoupon("10% 할인 쿠폰", CouponType.PERCENTAGE));
+        long couponId = 1L;
+
+        UserCoupon userCoupon = new UserCoupon(1L, couponId, UserCouponStatus.ISSUED, now, null);
+        UserCouponDto userCouponDto = new UserCouponDto(userCoupon, createCoupon(couponId, "10% 할인 쿠폰", CouponType.PERCENTAGE));
 
         when(dateTimeProvider.getLocalDateTimeNow()).thenReturn(now);
         when(userCouponRepository.findByIdWithCoupon(1L)).thenReturn(userCouponDto);
@@ -184,8 +182,10 @@ class CouponServiceTest {
     void getUserCoupons() {
         // given
         long userId = 1L;
-        Coupon coupon1 = createCoupon("10% 할인쿠폰", CouponType.PERCENTAGE);
-        Coupon coupon2 = createCoupon("10,000원 할인쿠폰", CouponType.FIXED);
+        long couponId1 = 1L;
+        long couponId2 = 2L;
+        Coupon coupon1 = createCoupon(couponId1, "10% 할인쿠폰", CouponType.PERCENTAGE);
+        Coupon coupon2 = createCoupon(couponId2, "10,000원 할인쿠폰", CouponType.FIXED);
 
         UserCoupon userCoupon1 = new UserCoupon(userId, 1L, UserCouponStatus.ISSUED, LocalDateTime.now(), null);
         UserCoupon userCoupon2 = new UserCoupon(userId, 2L, UserCouponStatus.USED, LocalDateTime.now(), null);
@@ -209,12 +209,12 @@ class CouponServiceTest {
                 );
     }
 
-    private Coupon createCoupon(String couponName, CouponType couponType) {
+    private Coupon createCoupon(Long couponId, String couponName, CouponType couponType) {
         CouponInfo couponInfo = new CouponInfo(couponName, couponType, 10);
         DiscountInfo discountInfo = new DiscountInfo(null, 10);
         LocalDateTime now = LocalDateTime.now();
         CouponUsableDate couponUsableDate = new CouponUsableDate(now.minusDays(1), now.plusDays(1));
 
-        return new Coupon(couponInfo, discountInfo, couponUsableDate);
+        return new Coupon(couponId, couponInfo, discountInfo, couponUsableDate);
     }
 }
