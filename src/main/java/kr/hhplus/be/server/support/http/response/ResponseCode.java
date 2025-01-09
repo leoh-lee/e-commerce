@@ -36,7 +36,14 @@ public enum ResponseCode {
 
     // 5XXX: 서버 에러
     // 최대 포인트 이상 포인트를 충전할 수 없다는 메시지
-        , MAXIMUM_POINT_LIMIT_EXCEEDED("5000", "최대 충전 가능 포인트를 초과했습니다.")
+        , POINT_CHARGE_FAILED("5000", "포인트 충전 실패")
+        , MAXIMUM_POINT_LIMIT_EXCEEDED("5001", "최대 충전 가능 포인트를 초과했습니다.")
+        , USER_POINT_SEARCH_FAILED("5002", "사용자 포인트 조회 실패")
+        , PRODUCT_SEARCH_FAILED("5100", "상품 목록 조회에 실패했습니다.")
+        , PRODUCT_TOP_SEARCH_FAILED("5101", "상위 상품 조회에 실패했습니다.")
+        , COUPON_EXPIRED("5200", "만료된 쿠폰입니다.")
+        , COUPON_INVALID("5201", "유효하지 않은 쿠폰입니다.")
+        , ORDER_SEARCH_FAILED("5300", "주문 목록 조회에 실패했습니다.")
 
         , INSUFFICIENT_BALANCE("5400", "결제 잔액이 부족합니다.")
         , USER_NOT_FOUND("5500", "사용자를 찾을 수 없습니다.")
