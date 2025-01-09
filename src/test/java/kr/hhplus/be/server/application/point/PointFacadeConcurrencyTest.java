@@ -45,6 +45,7 @@ class PointFacadeConcurrencyTest {
 
     @Test
     void chargePoint_concurrentRequests_shouldMaintainDataIntegrity() throws InterruptedException {
+        // given
         int numberOfThreads = 5;
         int chargeAmount = 50;
 
@@ -53,6 +54,7 @@ class PointFacadeConcurrencyTest {
         CyclicBarrier barrier = new CyclicBarrier(numberOfThreads);
         List<Exception> exceptions = Collections.synchronizedList(new ArrayList<>());
 
+        // when
         for (int i = 0; i < numberOfThreads; i++) {
             executorService.submit(() -> {
                 try {
@@ -73,7 +75,7 @@ class PointFacadeConcurrencyTest {
             executorService.shutdownNow();
         }
 
-        // 검증
+        // then
         assertThat(exceptions).isEmpty();
         PointSearchResponse response = pointFacade.searchPoint(userId);
         assertThat(response.balance()).isEqualTo(250);
