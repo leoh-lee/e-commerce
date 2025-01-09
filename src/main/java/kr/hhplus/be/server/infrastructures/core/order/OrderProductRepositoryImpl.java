@@ -6,7 +6,6 @@ import kr.hhplus.be.server.domain.order.OrderProduct;
 import kr.hhplus.be.server.domain.order.OrderProductRepository;
 import kr.hhplus.be.server.domain.order.QOrderProduct;
 import kr.hhplus.be.server.domain.order.dto.TopOrderProductDto;
-import kr.hhplus.be.server.domain.product.QProduct;
 import kr.hhplus.be.server.support.util.DateTimeProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -33,7 +32,6 @@ public class OrderProductRepositoryImpl implements OrderProductRepository {
         LocalDateTime threeDaysAgo = dateTimeProvider.getLocalDateTimeNow().minusDays(3);
 
         QOrderProduct orderProduct = QOrderProduct.orderProduct;
-        QProduct product = QProduct.product;
 
         List<TopOrderProductDto> topOrderProductDtos = queryFactory.select(
                         Projections.constructor(TopOrderProductDto.class,

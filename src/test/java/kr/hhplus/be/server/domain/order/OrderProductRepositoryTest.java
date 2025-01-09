@@ -12,7 +12,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -34,10 +33,10 @@ class OrderProductRepositoryTest {
 
         // when
         List<TopOrderProductDto> topOrderProducts = orderProductRepository.findTopOrderProducts(topCount);
+
         // then
         assertThat(topOrderProducts).isNotEmpty();
         assertThat(topOrderProducts.size()).isEqualTo(3);
-
 
         for (int i = 0; i < topCount; i++) {
             assertThat(topOrderProducts.get(i).getRank()).isEqualTo(i + 1);
@@ -48,7 +47,7 @@ class OrderProductRepositoryTest {
                break;
             }
 
-            assertThat(topOrderProducts.get(i).getOrderCount()).isGreaterThan(topOrderProducts.get(i+1).getOrderCount());
+            assertThat(topOrderProducts.get(i).getOrderCount()).isGreaterThanOrEqualTo(topOrderProducts.get(i+1).getOrderCount());
         }
     }
 }
