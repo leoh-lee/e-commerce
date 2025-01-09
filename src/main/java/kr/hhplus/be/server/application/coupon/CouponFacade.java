@@ -2,6 +2,7 @@ package kr.hhplus.be.server.application.coupon;
 
 import kr.hhplus.be.server.domain.coupon.CouponService;
 import kr.hhplus.be.server.domain.coupon.dto.CouponIssueResult;
+import kr.hhplus.be.server.domain.coupon.dto.CouponSearchResult;
 import kr.hhplus.be.server.domain.coupon.dto.UserCouponSearchResult;
 import kr.hhplus.be.server.domain.user.UserSearchResult;
 import kr.hhplus.be.server.domain.user.UserService;
@@ -9,6 +10,7 @@ import kr.hhplus.be.server.infrastructures.external.dataplatform.DataPlatform;
 import kr.hhplus.be.server.infrastructures.external.dataplatform.DataPlatformSendRequest;
 import kr.hhplus.be.server.infrastructures.external.dataplatform.RequestType;
 import kr.hhplus.be.server.interfaces.api.coupon.request.CouponIssueRequest;
+import kr.hhplus.be.server.interfaces.api.coupon.response.AvailableCouponResponse;
 import kr.hhplus.be.server.interfaces.api.coupon.response.CouponIssueResponse;
 import kr.hhplus.be.server.interfaces.api.coupon.response.UserCouponSearchResponse;
 import kr.hhplus.be.server.support.util.DateTimeProvider;
@@ -45,6 +47,13 @@ public class CouponFacade {
         return couponService.getUserCoupons(userId)
                 .stream()
                 .map(UserCouponSearchResponse::from)
+                .toList();
+    }
+
+    public List<AvailableCouponResponse> getIssuableCoupons(Long userId) {
+        return couponService.getIssuableCoupons(userId)
+                .stream()
+                .map(AvailableCouponResponse::from)
                 .toList();
     }
 
