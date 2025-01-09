@@ -7,8 +7,6 @@ import java.time.LocalDateTime;
 @Component
 public interface DateTimeProvider {
 
-    default LocalDateTime getLocalDateTimeNow() {
-        return LocalDateTime.now();
-    }
+    LocalDateTime getLocalDateTimeNow();
 
 }
