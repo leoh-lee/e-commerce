@@ -3,35 +3,56 @@ package kr.hhplus.be.server.domain.coupon;
 import jakarta.persistence.*;
 import kr.hhplus.be.server.domain.common.BaseEntity;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+@Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Coupon extends BaseEntity {
 
     @Id
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false)
-    private String couponName;
+    @Embedded
+    private CouponInfo couponInfo;
 
-    @Enumerated(EnumType.STRING)
-    private CouponType couponType;
+    @Embedded
+    private DiscountInfo discountInfo;
 
-    private int discountAmount;
+    @Embedded
+    private CouponUsableDate couponUsableDate;
 
-    private int discountRate;
+    public Coupon(CouponInfo couponInfo, DiscountInfo discountInfo, CouponUsableDate couponUsableDate) {
+        this.couponInfo = couponInfo;
+        this.discountInfo = discountInfo;
+        this.couponUsableDate = couponUsableDate;
+    }
 
-    @Column(nullable = false)
-    private LocalDateTime usableStartDt;
+    public boolean isUsable(LocalDateTime now) {
+        return couponUsableDate.isUsable(now);
+    }
 
-    @Column(nullable = false)
-    private LocalDateTime usableEndDt;
+    public void decreaseStock() {
+        couponInfo.decreaseStock();
+    }
 
-    @Column(nullable = false)
-    private int couponStock;
+    public int getDiscountPrice(int price) {
+        if (couponInfo.isPercentageType()) {
+            Integer discountRate = discountInfo.getDiscountRate();
+            return price * discountRate / 100;
+        }
+
+        Integer discountAmount = discountInfo.getDiscountAmount();
+        if (discountAmount > price) {
+            return price;
+        }
+        return discountAmount;
+    }
 
 }

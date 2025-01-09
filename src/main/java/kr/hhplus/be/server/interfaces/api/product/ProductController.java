@@ -28,7 +28,7 @@ public class ProductController implements ProductApi {
 
         Page<ProductSearchResponse> pageResult = new PageImpl<>(result);
 
-        return ApiResponse.ok(new PageResponse<>(pageResult), ResponseCode.SUCCESS_SEARCH_USER_POINT);
+        return ApiResponse.ok(new PageResponse<>(pageResult), ResponseCode.SUCCESS_SEARCH_PRODUCTS);
     }
 
     @Override
