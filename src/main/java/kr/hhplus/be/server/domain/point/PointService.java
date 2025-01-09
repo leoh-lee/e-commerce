@@ -46,6 +46,7 @@ public class PointService {
         return pointHistoryRepository.findByUserId(userId, pageable).map(PointHistorySearchResult::fromEntity);
     }
 
+    @Transactional
     public void createDefaultPoint(Long userId) {
         Point point = new Point(userId, 0);
 
