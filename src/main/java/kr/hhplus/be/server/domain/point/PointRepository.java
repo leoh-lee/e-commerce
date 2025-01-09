@@ -8,4 +8,5 @@ public interface PointRepository {
 
     Optional<Point> findByUserIdWithLock(Long userId);
 
+    void save(Point point);
 }

@@ -46,6 +46,12 @@ public class PointService {
         return pointHistoryRepository.findByUserId(userId, pageable).map(PointHistorySearchResult::fromEntity);
     }
 
+    public void createDefaultPoint(Long userId) {
+        Point point = new Point(userId, 0);
+
+        pointRepository.save(point);
+    }
+
     private Point findPointByUserId(long userId, boolean isLock) {
         if (isLock) {
             return pointRepository.findByUserIdWithLock(userId).orElseThrow(PointNotFoundException::new);
@@ -53,5 +59,4 @@ public class PointService {
 
         return pointRepository.findByUserId(userId).orElseThrow(PointNotFoundException::new);
     }
-
 }
