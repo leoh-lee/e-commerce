@@ -28,13 +28,10 @@ public class OrderController implements OrderApi {
         OrderResponse result = new OrderResponse(
                 1L,
                 1L,
-                orderProducts,
                 1L,
                 30_000,
                 12_000,
-                18_000,
-                "2024-01-05",
-                "PENDING"
+                18_000
         );
 
         return ApiResponse.ok(result, ResponseCode.SUCCESS_ORDER);
