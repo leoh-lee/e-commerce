@@ -1,25 +1,36 @@
 package kr.hhplus.be.server.domain.order;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import kr.hhplus.be.server.domain.common.BaseEntity;
-import kr.hhplus.be.server.domain.product.Product;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Table(name = "order_product", indexes = @Index(name = "idx_product_quantity", columnList = "created_at, product_id, quantity"))
 public class OrderProduct extends BaseEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "order_id")
-    private Order order;
+    private Long orderId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "product_id")
-    private Product product;
+    private Long productId;
+
+    @Min(1)
+    @Column(nullable = false)
+    private int quantity;
+
+    public OrderProduct(Long orderId, Long productId, int quantity) {
+        this.orderId = orderId;
+        this.productId = productId;
+        this.quantity = quantity;
+    }
 
 }
