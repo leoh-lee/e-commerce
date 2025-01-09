@@ -5,6 +5,6 @@ import java.util.List;
 public record OrderRequest(
         Long userId,
         List<OrderProductsRequest> products,
-        Long couponId
+        Long userCouponId
 ) {
 }
