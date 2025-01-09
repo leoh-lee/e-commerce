@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class Payment extends BaseEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
