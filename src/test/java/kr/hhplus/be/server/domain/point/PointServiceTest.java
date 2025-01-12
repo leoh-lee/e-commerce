@@ -43,12 +43,11 @@ class PointServiceTest {
     void getPointByUserId_returnsPoint() {
         // given
         long userId = 1L;
-        User user = new User(userId, "사용자1");
 
         long pointId = 1L;
         int balance = 100_000;
 
-        when(pointRepository.findByUserId(userId)).thenReturn(Optional.of(new Point(pointId, user, balance)));
+        when(pointRepository.findByUserId(userId)).thenReturn(Optional.of(new Point(pointId, userId, balance)));
 
         // when
         PointSearchResult result = pointService.getPointByUserId(userId);
@@ -80,8 +79,7 @@ class PointServiceTest {
         int balance = 100_000;
         long userId = 1L;
 
-        User user = new User(userId, "testUser");
-        Point point = new Point(1L, user, balance);
+        Point point = new Point(1L, userId, balance);
 
         when(pointRepository.findByUserIdWithLock(userId)).thenReturn(Optional.of(point));
 
@@ -100,8 +98,7 @@ class PointServiceTest {
         int balance = 100_000;
         long userId = 1L;
 
-        User user = new User(userId, "testUser");
-        Point point = new Point(1L, user, balance);
+        Point point = new Point(1L, userId, balance);
 
         when(pointRepository.findByUserIdWithLock(userId)).thenReturn(Optional.of(point));
 
@@ -120,8 +117,7 @@ class PointServiceTest {
         int balance = 100_000;
         long userId = 1L;
 
-        User user = new User(userId, "testUser");
-        Point point = new Point(1L, user, balance);
+        Point point = new Point(1L, userId, balance);
 
         when(pointRepository.findByUserIdWithLock(userId)).thenReturn(Optional.of(point));
 
@@ -140,8 +136,7 @@ class PointServiceTest {
         long userId = 1L;
         long pointId = 1L;
 
-        User user = new User(userId, "testUser");
-        Point point = new Point(pointId, user, balance);
+        Point point = new Point(pointId, userId, balance);
 
         Pageable pageable = PageRequest.of(0, 2);
 
@@ -167,6 +162,19 @@ class PointServiceTest {
                         tuple(1L, pointId, PointTransactionType.CHARGE, 10_000),
                         tuple(2L, pointId, PointTransactionType.USE, 5_000)
                 );
+    }
+
+    @Test
+    @DisplayName("사용자의 기본 포인트를 생성한다")
+    void createDefaultPoint_success() {
+        // given
+        long userId = 1L;
+
+        // when
+        pointService.createDefaultPoint(userId);
+
+        // then
+        verify(pointRepository, times(1)).save(any());
     }
 
 }

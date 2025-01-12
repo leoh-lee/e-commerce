@@ -18,4 +18,9 @@ public class UserRepositoryImpl implements UserRepository {
         return userJpaRepository.findById(id);
     }
 
+    @Override
+    public void save(User user) {
+        userJpaRepository.save(user);
+    }
+
 }

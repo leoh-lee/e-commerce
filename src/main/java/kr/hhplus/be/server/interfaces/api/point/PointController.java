@@ -1,6 +1,5 @@
 package kr.hhplus.be.server.interfaces.api.point;
 
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import kr.hhplus.be.server.interfaces.api.point.request.PointChargeRequest;
 import kr.hhplus.be.server.interfaces.api.point.response.PointChargeResponse;

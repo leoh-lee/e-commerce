@@ -3,7 +3,6 @@ package kr.hhplus.be.server.domain.point;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import kr.hhplus.be.server.domain.common.BaseEntity;
-import kr.hhplus.be.server.domain.user.User;
 import kr.hhplus.be.server.domain.point.exception.PointLimitExceededException;
 import kr.hhplus.be.server.domain.point.exception.PointNotEnoughException;
 import lombok.AccessLevel;
@@ -24,16 +23,15 @@ public class Point extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(nullable = false)
+    private Long userId;
 
     @Max(value = 2_000_000)
     @Column(nullable = false)
     private int balance;
 
-    public Point(User user, int balance) {
-        this.user = user;
+    public Point(Long userId, int balance) {
+        this.userId = userId;
         this.balance = balance;
     }
 

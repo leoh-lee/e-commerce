@@ -53,6 +53,15 @@ public class ProductRepositoryImpl implements ProductRepository {
         return productJpaRepository.findById(productId);
     }
 
+    public void save(Product product) {
+        productJpaRepository.save(product);
+    }
+
+    @Override
+    public List<Product> findByIds(List<Long> productIds) {
+        return productJpaRepository.findByIdIn(productIds);
+    }
+
     private BooleanExpression likeProductName(QProduct product, ProductSearchDto searchDto) {
         String productName = searchDto.productName();
 

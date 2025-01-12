@@ -1,6 +1,7 @@
 package kr.hhplus.be.server.domain.order;
 
 import kr.hhplus.be.server.domain.order.dto.*;
+import kr.hhplus.be.server.domain.order.exception.OrderNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -62,4 +63,9 @@ public class OrderService {
                 .toList();
     }
 
+    public OrderSearchResult getOrderById(Long orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException());
+
+        return OrderSearchResult.fromEntity(order);
+    }
 }

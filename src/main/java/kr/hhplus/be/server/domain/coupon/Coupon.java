@@ -28,6 +28,16 @@ public class Coupon extends BaseEntity {
     @Embedded
     private CouponUsableDate couponUsableDate;
 
+    @Version
+    private int version;
+
+    public Coupon(Long id, CouponInfo couponInfo, DiscountInfo discountInfo, CouponUsableDate couponUsableDate) {
+        this.id = id;
+        this.couponInfo = couponInfo;
+        this.discountInfo = discountInfo;
+        this.couponUsableDate = couponUsableDate;
+    }
+
     public Coupon(CouponInfo couponInfo, DiscountInfo discountInfo, CouponUsableDate couponUsableDate) {
         this.couponInfo = couponInfo;
         this.discountInfo = discountInfo;

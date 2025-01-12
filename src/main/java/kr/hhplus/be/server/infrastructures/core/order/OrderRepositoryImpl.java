@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 @RequiredArgsConstructor
 public class OrderRepositoryImpl implements OrderRepository {
@@ -21,5 +23,10 @@ public class OrderRepositoryImpl implements OrderRepository {
     @Override
     public Page<Order> findByUserId(Long userId, Pageable pageable) {
         return orderJpaRepository.findByUserId(userId, pageable);
+    }
+
+    @Override
+    public Optional<Order> findById(Long orderId) {
+        return orderJpaRepository.findById(orderId);
     }
 }
