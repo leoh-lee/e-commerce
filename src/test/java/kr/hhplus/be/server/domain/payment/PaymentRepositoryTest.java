@@ -1,7 +1,7 @@
 package kr.hhplus.be.server.domain.payment;
 
 import jakarta.persistence.EntityManager;
-import kr.hhplus.be.server.supoort.RepositoryTest;
+import kr.hhplus.be.server.support.RepositoryTest;
 import kr.hhplus.be.server.domain.order.Order;
 import kr.hhplus.be.server.domain.order.OrderPrice;
 import org.junit.jupiter.api.DisplayName;

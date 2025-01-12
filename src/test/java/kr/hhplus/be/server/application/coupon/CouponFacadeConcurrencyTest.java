@@ -1,6 +1,6 @@
 package kr.hhplus.be.server.application.coupon;
 
-import kr.hhplus.be.server.supoort.IntegrationTest;
+import kr.hhplus.be.server.support.IntegrationTest;
 import kr.hhplus.be.server.domain.coupon.*;
 import kr.hhplus.be.server.domain.coupon.enums.CouponType;
 import kr.hhplus.be.server.domain.user.User;
@@ -68,9 +68,9 @@ public class CouponFacadeConcurrencyTest extends IntegrationTest {
 
     @AfterEach
     void tearDown() {
-        userJpaRepository.deleteAllInBatch();
-        couponJpaRepository.deleteAllInBatch();
         userCouponJpaRepository.deleteAllInBatch();
+        couponJpaRepository.deleteAllInBatch();
+        userJpaRepository.deleteAllInBatch();
     }
 
     @Test

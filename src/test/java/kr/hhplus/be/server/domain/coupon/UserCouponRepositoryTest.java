@@ -1,7 +1,7 @@
 package kr.hhplus.be.server.domain.coupon;
 
 import jakarta.persistence.EntityManager;
-import kr.hhplus.be.server.supoort.RepositoryTest;
+import kr.hhplus.be.server.support.RepositoryTest;
 import kr.hhplus.be.server.domain.coupon.dto.UserCouponDto;
 import kr.hhplus.be.server.domain.coupon.enums.CouponType;
 import kr.hhplus.be.server.domain.coupon.enums.UserCouponStatus;
@@ -109,7 +109,7 @@ class UserCouponRepositoryTest extends RepositoryTest {
         em.flush();
 
         // when
-        UserCouponDto userCouponDto = userCouponRepository.findByIdWithCoupon(userCoupon.getUserId());
+        UserCouponDto userCouponDto = userCouponRepository.findByIdWithCoupon(userCoupon.getId());
 
         // then
         assertThat(userCouponDto).extracting("userCoupon", "coupon")

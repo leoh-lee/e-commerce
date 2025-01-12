@@ -1,10 +1,8 @@
 package kr.hhplus.be.server.domain.product;
 
 import jakarta.persistence.EntityManager;
-import kr.hhplus.be.server.infrastructures.core.product.ProductJpaRepository;
-import kr.hhplus.be.server.supoort.RepositoryTest;
+import kr.hhplus.be.server.support.RepositoryTest;
 import kr.hhplus.be.server.domain.product.dto.ProductSearchDto;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,27 +29,21 @@ class ProductRepositoryTest extends RepositoryTest {
     @Autowired
     private ProductRepository productRepository;
 
-    @Autowired
-    private ProductJpaRepository productJpaRepository;
-
     @BeforeEach
     void setUp() {
         pageable = PageRequest.of(0, PAGE_SIZE);
 
         for (int i = 1; i <= 5; i++) {
             Product product = new Product("신발" + i, BigDecimal.valueOf(i * 10000));
-            em.persist(product);
+            productRepository.save(product);
         }
 
         for (int i = 6; i <= 10; i++) {
             Product product = new Product("상의" + i, BigDecimal.valueOf(i * 10000));
-            em.persist(product);
+            productRepository.save(product);
         }
-    }
 
-    @AfterEach
-    void tearDown() {
-        productJpaRepository.deleteAllInBatch();
+        em.flush();
     }
 
     @Test

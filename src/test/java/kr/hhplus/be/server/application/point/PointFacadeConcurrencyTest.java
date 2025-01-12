@@ -1,12 +1,16 @@
 package kr.hhplus.be.server.application.point;
 
-import kr.hhplus.be.server.supoort.IntegrationTest;
+import kr.hhplus.be.server.infrastructures.core.point.PointHistoryJpaRepository;
+import kr.hhplus.be.server.infrastructures.core.point.PointJpaRepository;
+import kr.hhplus.be.server.infrastructures.core.user.UserJpaRepository;
+import kr.hhplus.be.server.support.IntegrationTest;
 import kr.hhplus.be.server.domain.point.PointService;
 import kr.hhplus.be.server.domain.user.UserCreateDto;
 import kr.hhplus.be.server.domain.user.UserService;
 import kr.hhplus.be.server.domain.user.dto.UserCreateResult;
 import kr.hhplus.be.server.interfaces.api.point.request.PointChargeRequest;
 import kr.hhplus.be.server.interfaces.api.point.response.PointSearchResponse;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +34,15 @@ class PointFacadeConcurrencyTest extends IntegrationTest {
     @Autowired
     private PointService pointService;
 
+    @Autowired
+    private UserJpaRepository userJpaRepository;
+
+    @Autowired
+    private PointJpaRepository pointJpaRepository;
+
+    @Autowired
+    private PointHistoryJpaRepository pointHistoryJpaRepository;
+
     private Long userId;
 
     @BeforeEach
@@ -37,6 +50,13 @@ class PointFacadeConcurrencyTest extends IntegrationTest {
         UserCreateResult userCreateResult = userService.createUser(new UserCreateDto("testUser"));
         userId = userCreateResult.userId();
         pointService.createDefaultPoint(userId);
+    }
+
+    @AfterEach
+    void tearDown() {
+        pointHistoryJpaRepository.deleteAllInBatch();
+        pointJpaRepository.deleteAllInBatch();
+        userJpaRepository.deleteAllInBatch();
     }
 
     @Test

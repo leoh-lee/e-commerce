@@ -1,7 +1,7 @@
 package kr.hhplus.be.server.domain.point;
 
 import jakarta.persistence.EntityManager;
-import kr.hhplus.be.server.supoort.RepositoryTest;
+import kr.hhplus.be.server.support.RepositoryTest;
 import kr.hhplus.be.server.domain.user.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

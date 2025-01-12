@@ -1,6 +1,8 @@
 package kr.hhplus.be.server.application.product;
 
-import kr.hhplus.be.server.supoort.IntegrationTest;
+import kr.hhplus.be.server.infrastructures.core.product.ProductJpaRepository;
+import kr.hhplus.be.server.infrastructures.core.product.ProductStockJpaRepository;
+import kr.hhplus.be.server.support.IntegrationTest;
 import kr.hhplus.be.server.application.product.dto.ProductSearchRequest;
 import kr.hhplus.be.server.domain.product.Product;
 import kr.hhplus.be.server.domain.product.ProductRepository;
@@ -8,6 +10,7 @@ import kr.hhplus.be.server.domain.product.ProductStock;
 import kr.hhplus.be.server.domain.product.ProductStockRepository;
 import kr.hhplus.be.server.interfaces.api.product.response.ProductSearchResponse;
 import org.assertj.core.groups.Tuple;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,7 +33,13 @@ class ProductFacadeTest extends IntegrationTest {
     private ProductRepository productRepository;
 
     @Autowired
+    private ProductJpaRepository productJpaRepository;
+
+    @Autowired
     private ProductStockRepository productStockRepository;
+
+    @Autowired
+    private ProductStockJpaRepository productStockJpaRepository;
 
     @BeforeEach
     @Transactional
@@ -41,6 +50,12 @@ class ProductFacadeTest extends IntegrationTest {
             ProductStock productStock = new ProductStock(product, 0);
             productStockRepository.save(productStock);
         }
+    }
+
+    @AfterEach
+    void tearDown() {
+        productStockJpaRepository.deleteAllInBatch();
+        productJpaRepository.deleteAllInBatch();
     }
 
     @Test
