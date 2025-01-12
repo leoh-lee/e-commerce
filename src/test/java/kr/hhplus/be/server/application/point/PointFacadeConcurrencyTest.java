@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.application.point;
 
+import kr.hhplus.be.server.supoort.IntegrationTest;
 import kr.hhplus.be.server.domain.point.PointService;
 import kr.hhplus.be.server.domain.user.UserCreateDto;
 import kr.hhplus.be.server.domain.user.UserService;
@@ -9,10 +10,8 @@ import kr.hhplus.be.server.interfaces.api.point.response.PointSearchResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -20,10 +19,7 @@ import java.util.concurrent.*;
 
 import static org.assertj.core.api.Assertions.*;
 
-@SpringBootTest
-@ActiveProfiles("test")
-@Testcontainers
-class PointFacadeConcurrencyTest {
+class PointFacadeConcurrencyTest extends IntegrationTest {
 
     @Autowired
     private PointFacade pointFacade;
@@ -47,7 +43,7 @@ class PointFacadeConcurrencyTest {
     void chargePoint_concurrentRequests_shouldMaintainDataIntegrity() throws InterruptedException {
         // given
         int numberOfThreads = 5;
-        int chargeAmount = 50;
+        BigDecimal chargeAmount = BigDecimal.valueOf(50);
 
         ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
         CountDownLatch latch = new CountDownLatch(numberOfThreads);
@@ -78,8 +74,7 @@ class PointFacadeConcurrencyTest {
         // then
         assertThat(exceptions).isEmpty();
         PointSearchResponse response = pointFacade.searchPoint(userId);
-        assertThat(response.balance()).isEqualTo(250);
-
+        assertThat(response.balance()).isEqualByComparingTo(BigDecimal.valueOf(250));
     }
 
 }

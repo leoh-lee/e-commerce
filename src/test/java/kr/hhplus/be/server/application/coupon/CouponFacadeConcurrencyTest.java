@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.application.coupon;
 
+import kr.hhplus.be.server.supoort.IntegrationTest;
 import kr.hhplus.be.server.domain.coupon.*;
 import kr.hhplus.be.server.domain.coupon.enums.CouponType;
 import kr.hhplus.be.server.domain.user.User;
@@ -14,9 +15,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -26,10 +24,7 @@ import java.util.concurrent.*;
 
 import static org.assertj.core.api.Assertions.*;
 
-@SpringBootTest
-@ActiveProfiles("test")
-@Testcontainers
-public class CouponFacadeConcurrencyTest {
+public class CouponFacadeConcurrencyTest extends IntegrationTest {
 
     @Autowired
     private CouponFacade couponFacade;

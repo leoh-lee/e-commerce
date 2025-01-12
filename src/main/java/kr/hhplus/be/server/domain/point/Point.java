@@ -10,14 +10,16 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Point extends BaseEntity {
 
-    private static final int MAX_BALANCE = 2_000_000;
-    private static final int BALANCE_UNIT = 2_000_000;
+    private static final BigDecimal MAX_BALANCE2 = BigDecimal.valueOf(2_000_000);
+    private static final BigDecimal BALANCE_UNIT2 = BigDecimal.valueOf(2_000_000);
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,25 +30,25 @@ public class Point extends BaseEntity {
 
     @Max(value = 2_000_000)
     @Column(nullable = false)
-    private int balance;
+    private BigDecimal balance;
 
-    public Point(Long userId, int balance) {
+    public Point(Long userId, BigDecimal balance) {
         this.userId = userId;
         this.balance = balance;
     }
 
-    public void usePoint(int amount) {
-        if (balance < amount) {
+    public void usePoint(BigDecimal amount) {
+        if (balance.compareTo(amount) < 0) {
             throw new PointNotEnoughException();
         }
 
-        this.balance -= amount;
+        this.balance = this.balance.subtract(amount);
     }
 
-    public void chargePoint(int amount) {
-        int chargedPoint = balance + amount;
+    public void chargePoint(BigDecimal amount) {
+        BigDecimal chargedPoint = balance.add(amount);
 
-        if (chargedPoint > MAX_BALANCE) {
+        if (chargedPoint.compareTo(MAX_BALANCE2) > 0) {
             throw new PointLimitExceededException();
         }
 

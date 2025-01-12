@@ -3,11 +3,13 @@ package kr.hhplus.be.server.domain.payment.dto;
 import kr.hhplus.be.server.domain.payment.Payment;
 import kr.hhplus.be.server.domain.payment.PaymentStatus;
 
+import java.math.BigDecimal;
+
 public record PaymentSearchResult(
         Long id,
         Long userId,
         Long orderId,
-        int paymentPrice,
+        BigDecimal paymentPrice,
         PaymentStatus paymentStatus
 ) {
 

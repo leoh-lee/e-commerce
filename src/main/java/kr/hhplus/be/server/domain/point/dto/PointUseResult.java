@@ -2,10 +2,12 @@ package kr.hhplus.be.server.domain.point.dto;
 
 import kr.hhplus.be.server.domain.point.Point;
 
+import java.math.BigDecimal;
+
 public record PointUseResult(
         Long id,
         Long userId,
-        int balance
+        BigDecimal balance
 ) {
 
     public static PointUseResult fromEntity(Point point) {

@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -17,7 +18,7 @@ public class PaymentService {
     private final PaymentRepository paymentRepository;
 
     @Transactional
-    public PaymentResult save(Long orderId, int price) {
+    public PaymentResult save(Long orderId, BigDecimal price) {
         Payment payment = new Payment(orderId, price, PaymentStatus.PENDING);
 
         paymentRepository.save(payment);

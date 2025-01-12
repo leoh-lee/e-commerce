@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.application.coupon;
 
+import kr.hhplus.be.server.supoort.IntegrationTest;
 import kr.hhplus.be.server.domain.coupon.*;
 import kr.hhplus.be.server.domain.coupon.enums.CouponType;
 import kr.hhplus.be.server.domain.coupon.enums.UserCouponStatus;
@@ -15,10 +16,7 @@ import kr.hhplus.be.server.interfaces.api.coupon.response.UserCouponSearchRespon
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -26,11 +24,8 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
-@SpringBootTest
-@ActiveProfiles("test")
-@Testcontainers
 @Transactional
-class CouponFacadeTest {
+class CouponFacadeTest extends IntegrationTest {
 
     @Autowired
     private CouponFacade couponFacade;

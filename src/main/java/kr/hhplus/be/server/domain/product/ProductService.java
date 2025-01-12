@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -29,7 +30,7 @@ public class ProductService {
         return ProductSearchResult.fromEntity(product);
     }
 
-    public int getTotalPriceBy(List<OrderProductDto> orderProductsDtos) {
+    public BigDecimal getTotalPriceBy(List<OrderProductDto> orderProductsDtos) {
 
         Map<Long, Integer> productQuantityMap = orderProductsDtos.stream()
                 .collect(Collectors.toMap(OrderProductDto::productId, OrderProductDto::quantity));
@@ -40,8 +41,8 @@ public class ProductService {
         List<Product> products = productRepository.findByIds(productIds);
 
         return products.stream()
-                .mapToInt(product -> product.getProductPrice() * productQuantityMap.get(product.getId()))
-                .sum();
+                .map(product -> product.getProductPrice().multiply(BigDecimal.valueOf(productQuantityMap.get(product.getId()))))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public void decreaseProductStock(List<OrderProductDto> orderProductsDtos) {

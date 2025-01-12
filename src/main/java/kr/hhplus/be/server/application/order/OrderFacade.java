@@ -23,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Component
@@ -47,7 +48,7 @@ public class OrderFacade {
                 .map(OrderProductsRequest::toDto)
                 .toList();
 
-        int totalPrice = productService.getTotalPriceBy(orderProductsDtos);
+        BigDecimal totalPrice = productService.getTotalPriceBy(orderProductsDtos);
         productService.decreaseProductStock(orderProductsDtos);
 
         Long userCouponId = orderRequest.userCouponId();

@@ -3,10 +3,12 @@ package kr.hhplus.be.server.interfaces.api.product.response;
 import kr.hhplus.be.server.domain.product.ProductStock;
 import kr.hhplus.be.server.domain.product.dto.ProductSearchResult;
 
+import java.math.BigDecimal;
+
 public record ProductSearchResponse(
         Long id,
         String name,
-        int price,
+        BigDecimal price,
         int stock
 ) {
 

@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,14 +38,14 @@ class ProductServiceTest {
         Pageable pageable = PageRequest.of(0, 10);
 
         List<Product> products = List.of(
-                new Product("상품1", 10000),
-                new Product("상품2", 20000)
+                new Product("상품1", BigDecimal.valueOf(10_000)),
+                new Product("상품2", BigDecimal.valueOf(20000))
         );
 
         when(productRepository.findAll(any(), any())).thenReturn(new PageImpl<>(products));
 
         // when
-        ProductSearchDto productSearchDto = new ProductSearchDto("상품1", 10000, 30000);
+        ProductSearchDto productSearchDto = new ProductSearchDto("상품1", BigDecimal.valueOf(10_000), BigDecimal.valueOf(30_000));
 
         Page<ProductSearchResult> result = productService.searchProducts(productSearchDto, pageable);
 
@@ -67,7 +68,7 @@ class ProductServiceTest {
     void searchProduct_success() {
         // given
         String productName = "상품1";
-        int productPrice = 10000;
+        BigDecimal productPrice = BigDecimal.valueOf(10_000);
 
         Optional<Product> product = Optional.of(new Product(productName, productPrice));
 

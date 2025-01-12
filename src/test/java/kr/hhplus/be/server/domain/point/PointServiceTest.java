@@ -17,6 +17,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,7 +46,7 @@ class PointServiceTest {
         long userId = 1L;
 
         long pointId = 1L;
-        int balance = 100_000;
+        BigDecimal balance = BigDecimal.valueOf(100_000);
 
         when(pointRepository.findByUserId(userId)).thenReturn(Optional.of(new Point(pointId, userId, balance)));
 
@@ -75,8 +76,8 @@ class PointServiceTest {
     @DisplayName("포인트를 사용(차감)한다.")
     void usePoint_success() {
         // given
-        int amount = 90_000;
-        int balance = 100_000;
+        BigDecimal amount = BigDecimal.valueOf(90_000);
+        BigDecimal balance = BigDecimal.valueOf(100_000);
         long userId = 1L;
 
         Point point = new Point(1L, userId, balance);
@@ -87,15 +88,15 @@ class PointServiceTest {
         PointUseResult pointUseResult = pointService.usePoint(userId, amount);
 
         // then
-        assertThat(pointUseResult.balance()).isEqualTo(balance - amount);
+        assertThat(pointUseResult.balance()).isEqualTo(balance.subtract(amount));
     }
 
     @Test
     @DisplayName("포인트를 충전한다.")
     void chargePoint_success() {
         // given
-        int amount = 90_000;
-        int balance = 100_000;
+        BigDecimal amount = BigDecimal.valueOf(90_000);
+        BigDecimal balance = BigDecimal.valueOf(100_000);
         long userId = 1L;
 
         Point point = new Point(1L, userId, balance);
@@ -106,15 +107,15 @@ class PointServiceTest {
         PointChargeResult pointChargeResult = pointService.chargePoint(userId, amount);
 
         // then
-        assertThat(pointChargeResult.balance()).isEqualTo(balance + amount);
+        assertThat(pointChargeResult.balance()).isEqualTo(balance.add(amount));
     }
 
     @Test
     @DisplayName("포인트를 충전하면 포인트 충전 내역을 저장한다.")
     void savePointHistory_whenSavePoint() {
         // given
-        int amount = 90_000;
-        int balance = 100_000;
+        BigDecimal amount = BigDecimal.valueOf(90_000);
+        BigDecimal balance = BigDecimal.valueOf(100_000);
         long userId = 1L;
 
         Point point = new Point(1L, userId, balance);
@@ -132,7 +133,7 @@ class PointServiceTest {
     @DisplayName("포인트 충전/사용 이력을 조회한다.")
     void getPointHistory_success() {
         // given
-        int balance = 100_000;
+        BigDecimal balance = BigDecimal.valueOf(100_000);
         long userId = 1L;
         long pointId = 1L;
 
@@ -144,8 +145,8 @@ class PointServiceTest {
 
         Page<PointHistory> result = new PageImpl<>(
                 List.of(
-                        new PointHistory(1L, point, PointTransactionType.CHARGE, 10_000),
-                        new PointHistory(2L, point, PointTransactionType.USE, 5_000)
+                        new PointHistory(1L, point, PointTransactionType.CHARGE, BigDecimal.valueOf(10_000)),
+                        new PointHistory(2L, point, PointTransactionType.USE, BigDecimal.valueOf(5_000))
                 ),
                 pageable, total
         );
@@ -159,8 +160,8 @@ class PointServiceTest {
         assertThat(searchResults.getSize()).isEqualTo(total);
         assertThat(searchResults.getContent()).extracting("id", "pointId", "transactionType", "amount")
                 .containsExactly(
-                        tuple(1L, pointId, PointTransactionType.CHARGE, 10_000),
-                        tuple(2L, pointId, PointTransactionType.USE, 5_000)
+                        tuple(1L, pointId, PointTransactionType.CHARGE, BigDecimal.valueOf(10_000)),
+                        tuple(2L, pointId, PointTransactionType.USE, BigDecimal.valueOf(5_000))
                 );
     }
 

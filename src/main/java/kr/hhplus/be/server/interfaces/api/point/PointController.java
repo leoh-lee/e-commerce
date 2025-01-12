@@ -9,6 +9,8 @@ import kr.hhplus.be.server.support.http.response.ResponseCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+
 @RestController
 @RequestMapping("/api/v1/points")
 @RequiredArgsConstructor
@@ -16,14 +18,14 @@ public class PointController implements PointApi {
 
     @Override
     public ApiResponse<PointChargeResponse> chargePoint(@Valid @RequestBody PointChargeRequest pointChargeRequest) {
-        PointChargeResponse result = new PointChargeResponse(1L, 10_000);
+        PointChargeResponse result = new PointChargeResponse(1L, BigDecimal.valueOf(10_000));
 
         return ApiResponse.ok(result, ResponseCode.SUCCESS_CHARGE_POINT);
     }
 
     @Override
     public ApiResponse<PointSearchResponse> searchPoint(@PathVariable Long userId) {
-        PointSearchResponse result = new PointSearchResponse(userId, 10_000);
+        PointSearchResponse result = new PointSearchResponse(userId, BigDecimal.valueOf(10_000));
 
         return ApiResponse.ok(result, ResponseCode.SUCCESS_SEARCH_USER_POINT);
     }

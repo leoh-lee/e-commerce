@@ -15,6 +15,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
@@ -39,7 +41,7 @@ class PointFacadeIntegrationTest {
     @Test
     void chargePoint_success() {
         // Given
-        int amount = 50;
+        BigDecimal amount = BigDecimal.valueOf(50);
 
         UserCreateDto testUser = new UserCreateDto("testUser");
         UserCreateResult userCreateResult = userService.createUser(testUser);
@@ -55,7 +57,7 @@ class PointFacadeIntegrationTest {
         // Then
         assertThat(response).isNotNull();
         assertThat(response.userId()).isEqualTo(userId);
-        assertThat(response.amount()).isEqualTo(50);
+        assertThat(response.amount()).isEqualByComparingTo(BigDecimal.valueOf(50));
 
         // 데이터 플랫폼 호출 검증
         verify(dataPlatform, times(1)).send(any(DataPlatformSendRequest.class));
@@ -75,7 +77,7 @@ class PointFacadeIntegrationTest {
         // Then
         assertThat(response).isNotNull();
         assertThat(response.userId()).isEqualTo(userId);
-        assertThat(response.balance()).isEqualTo(0);
+        assertThat(response.balance()).isEqualByComparingTo(BigDecimal.ZERO);
     }
 
 }

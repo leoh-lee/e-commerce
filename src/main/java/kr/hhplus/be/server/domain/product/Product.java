@@ -6,6 +6,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -19,12 +21,12 @@ public class Product extends BaseEntity {
     private String productName;
 
     @Column(nullable = false)
-    private int productPrice;
+    private BigDecimal productPrice;
 
     @OneToOne(mappedBy = "product", cascade = CascadeType.ALL)
     private ProductStock stock;
 
-    public Product(String productName, int productPrice) {
+    public Product(String productName, BigDecimal productPrice) {
         this.productName = productName;
         this.productPrice = productPrice;
     }

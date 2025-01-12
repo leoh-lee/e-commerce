@@ -17,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+
 @Component
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -35,7 +37,7 @@ public class PaymentFacade {
 
         OrderSearchResult order = orderService.getOrderById(orderId);
         Long userId = order.userId();
-        int finalPrice = order.finalPrice();
+        BigDecimal finalPrice = order.finalPrice();
 
         UserSearchResult userById = userService.getUserById(userId);
 

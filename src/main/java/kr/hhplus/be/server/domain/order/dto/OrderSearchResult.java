@@ -3,13 +3,15 @@ package kr.hhplus.be.server.domain.order.dto;
 import kr.hhplus.be.server.domain.order.Order;
 import kr.hhplus.be.server.domain.order.OrderPrice;
 
+import java.math.BigDecimal;
+
 public record OrderSearchResult(
         Long id,
         Long userId,
         Long userCouponId,
-        int basePrice,
-        int discountAmount,
-        int finalPrice
+        BigDecimal basePrice,
+        BigDecimal discountAmount,
+        BigDecimal finalPrice
 ) {
 
     public static OrderSearchResult fromEntity(Order order) {

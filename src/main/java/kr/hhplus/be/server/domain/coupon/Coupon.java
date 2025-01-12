@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
@@ -52,17 +53,17 @@ public class Coupon extends BaseEntity {
         couponInfo.decreaseStock();
     }
 
-    public int getDiscountPrice(int price) {
+    public BigDecimal getDiscountPrice(BigDecimal price) {
         if (couponInfo.isPercentageType()) {
             Integer discountRate = discountInfo.getDiscountRate();
-            return price * discountRate / 100;
+            return price.multiply(BigDecimal.valueOf(discountRate)).divide(BigDecimal.valueOf(100));
         }
 
         Integer discountAmount = discountInfo.getDiscountAmount();
-        if (discountAmount > price) {
+        if (BigDecimal.valueOf(discountAmount).compareTo(price) > 0) {
             return price;
         }
-        return discountAmount;
+        return BigDecimal.valueOf(discountAmount);
     }
 
 }

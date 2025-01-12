@@ -1,26 +1,18 @@
 package kr.hhplus.be.server.domain.order;
 
-import kr.hhplus.be.server.infrastructures.core.order.OrderRepositoryImpl;
+import kr.hhplus.be.server.supoort.RepositoryTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.context.ActiveProfiles;
-import org.testcontainers.junit.jupiter.Testcontainers;
+
+import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.*;
 
-@DataJpaTest
-@Import(OrderRepositoryImpl.class)
-@Testcontainers
-@ActiveProfiles("test")
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class OrderRepositoryTest {
+class OrderRepositoryTest extends RepositoryTest {
 
     @Autowired
     private OrderRepository orderRepository;
@@ -32,7 +24,7 @@ class OrderRepositoryTest {
         long userId = 1L;
         long otherUserId = 2L;
 
-        OrderPrice orderPrice = new OrderPrice(20_000, 10_000, 10_000);
+        OrderPrice orderPrice = new OrderPrice(BigDecimal.valueOf(20_000), BigDecimal.valueOf(10_000), BigDecimal.valueOf(10_000));
         Order order1 = new Order(userId, 1L, orderPrice);
         Order order2 = new Order(userId, 2L, orderPrice);
         Order order3 = new Order(otherUserId, 2L, orderPrice);

@@ -4,6 +4,8 @@ import kr.hhplus.be.server.domain.product.exception.StockNotEnoughException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
+
 import static org.assertj.core.api.Assertions.*;
 
 class ProductStockTest {
@@ -15,7 +17,7 @@ class ProductStockTest {
         int newStock = 10;
         int originalStock = 10;
 
-        Product product = new Product("상품1", 10_000);
+        Product product = new Product("상품1", BigDecimal.valueOf(10_000));
         ProductStock stock = new ProductStock(product, originalStock);
         product.addStock(stock);
 
@@ -33,7 +35,7 @@ class ProductStockTest {
         int originalStock = 10;
         int decreaseStock = 11;
 
-        Product product = new Product("상품1", 10_000);
+        Product product = new Product("상품1", BigDecimal.valueOf(10_000));
 
         ProductStock stock = new ProductStock(product, originalStock);
         product.addStock(stock);
@@ -50,7 +52,7 @@ class ProductStockTest {
         int originalStock = 10;
         int decreaseStock = 9;
 
-        Product product = new Product("상품1", 10_000);
+        Product product = new Product("상품1", BigDecimal.valueOf(10_000));
 
         ProductStock stock = new ProductStock(product, originalStock);
         product.addStock(stock);

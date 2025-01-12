@@ -1,28 +1,22 @@
 package kr.hhplus.be.server.domain.coupon;
 
 import jakarta.persistence.EntityManager;
+import kr.hhplus.be.server.supoort.RepositoryTest;
 import kr.hhplus.be.server.domain.coupon.dto.UserCouponDto;
 import kr.hhplus.be.server.domain.coupon.enums.CouponType;
 import kr.hhplus.be.server.domain.coupon.enums.UserCouponStatus;
 import kr.hhplus.be.server.domain.user.User;
-import kr.hhplus.be.server.infrastructures.core.coupon.UserCouponRepositoryImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Import;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Import(UserCouponRepositoryImpl.class)
-class UserCouponRepositoryTest {
+class UserCouponRepositoryTest extends RepositoryTest {
 
     @Autowired
     private UserCouponRepository userCouponRepository;
