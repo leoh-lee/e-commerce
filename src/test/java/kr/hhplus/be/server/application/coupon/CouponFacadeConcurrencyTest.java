@@ -5,12 +5,8 @@ import kr.hhplus.be.server.domain.coupon.*;
 import kr.hhplus.be.server.domain.coupon.enums.CouponType;
 import kr.hhplus.be.server.domain.user.User;
 import kr.hhplus.be.server.domain.user.UserRepository;
-import kr.hhplus.be.server.infrastructures.core.coupon.CouponJpaRepository;
-import kr.hhplus.be.server.infrastructures.core.coupon.UserCouponJpaRepository;
-import kr.hhplus.be.server.infrastructures.core.user.UserJpaRepository;
 import kr.hhplus.be.server.interfaces.api.coupon.request.CouponIssueRequest;
 import kr.hhplus.be.server.interfaces.api.coupon.response.CouponIssueResponse;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -38,15 +34,6 @@ public class CouponFacadeConcurrencyTest extends IntegrationTest {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private UserJpaRepository userJpaRepository;
-
-    @Autowired
-    private UserCouponJpaRepository userCouponJpaRepository;
-
-    @Autowired
-    private CouponJpaRepository couponJpaRepository;
-
     private Long couponId;
     private Long userId;
 
@@ -64,13 +51,6 @@ public class CouponFacadeConcurrencyTest extends IntegrationTest {
         User user = new User("user1");
         userRepository.save(user);
         userId = user.getId();
-    }
-
-    @AfterEach
-    void tearDown() {
-        userCouponJpaRepository.deleteAllInBatch();
-        couponJpaRepository.deleteAllInBatch();
-        userJpaRepository.deleteAllInBatch();
     }
 
     @Test

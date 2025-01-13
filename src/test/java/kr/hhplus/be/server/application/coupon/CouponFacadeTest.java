@@ -6,14 +6,10 @@ import kr.hhplus.be.server.domain.coupon.enums.CouponType;
 import kr.hhplus.be.server.domain.coupon.enums.UserCouponStatus;
 import kr.hhplus.be.server.domain.user.User;
 import kr.hhplus.be.server.domain.user.UserRepository;
-import kr.hhplus.be.server.infrastructures.core.coupon.CouponJpaRepository;
-import kr.hhplus.be.server.infrastructures.core.coupon.UserCouponJpaRepository;
-import kr.hhplus.be.server.infrastructures.core.user.UserJpaRepository;
 import kr.hhplus.be.server.interfaces.api.coupon.request.CouponIssueRequest;
 import kr.hhplus.be.server.interfaces.api.coupon.response.AvailableCouponResponse;
 import kr.hhplus.be.server.interfaces.api.coupon.response.CouponIssueResponse;
 import kr.hhplus.be.server.interfaces.api.coupon.response.UserCouponSearchResponse;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,22 +34,6 @@ class CouponFacadeTest extends IntegrationTest {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private UserJpaRepository userJpaRepository;
-
-    @Autowired
-    private UserCouponJpaRepository userCouponJpaRepository;
-
-    @Autowired
-    private CouponJpaRepository couponJpaRepository;
-
-    @AfterEach
-    void tearDown() {
-        userCouponJpaRepository.deleteAllInBatch();
-        couponJpaRepository.deleteAllInBatch();
-        userJpaRepository.deleteAllInBatch();
-    }
 
     @Test
     void issueCoupon_success() {
@@ -117,6 +97,7 @@ class CouponFacadeTest extends IntegrationTest {
 
         User user = new User("user");
         userRepository.save(user);
+
         Long userId = user.getId();
 
         userCouponRepository.save(new UserCoupon(userId, couponIds.getFirst(), UserCouponStatus.ISSUED, null, null));
