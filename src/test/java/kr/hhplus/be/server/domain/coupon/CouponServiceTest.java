@@ -1,5 +1,23 @@
 package kr.hhplus.be.server.domain.coupon;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.tuple;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import static org.mockito.ArgumentMatchers.any;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import kr.hhplus.be.server.domain.coupon.dto.CouponSearchResult;
 import kr.hhplus.be.server.domain.coupon.dto.CouponUseResult;
 import kr.hhplus.be.server.domain.coupon.dto.UserCouponDto;
@@ -9,20 +27,6 @@ import kr.hhplus.be.server.domain.coupon.enums.UserCouponStatus;
 import kr.hhplus.be.server.domain.coupon.exception.AlreadyIssuedCouponException;
 import kr.hhplus.be.server.domain.coupon.exception.CouponNotFoundException;
 import kr.hhplus.be.server.support.util.DateTimeProvider;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CouponServiceTest {
@@ -169,7 +173,7 @@ class CouponServiceTest {
         when(userCouponRepository.findByIdWithCoupon(1L)).thenReturn(userCouponDto);
 
         // when
-        CouponUseResult couponUseResult = couponService.useCoupon(1L, 10000);
+        CouponUseResult couponUseResult = couponService.useCoupon(1L, BigDecimal.valueOf(10000));
 
         // then
         assertThat(userCoupon.getUserCouponStatus()).isEqualTo(UserCouponStatus.USED);

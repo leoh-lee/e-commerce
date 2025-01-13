@@ -10,6 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,7 +34,7 @@ class PaymentServiceTest {
         doNothing().when(paymentRepository).save(any());
 
         // when
-        paymentService.save(1L, 10_000);
+        paymentService.save(1L, BigDecimal.valueOf(10_000));
 
         // then
         verify(paymentRepository, times(1)).save(any());
@@ -44,7 +45,7 @@ class PaymentServiceTest {
     void changePaymentStatus_success() {
         // given
         long paymentId = 1L;
-        Payment payment = new Payment(paymentId, 1L, 10_000, PaymentStatus.PENDING);
+        Payment payment = new Payment(paymentId, 1L, BigDecimal.valueOf(10_000), PaymentStatus.PENDING);
 
         when(paymentRepository.findById(paymentId)).thenReturn(Optional.of(payment));
 
@@ -61,8 +62,8 @@ class PaymentServiceTest {
         // given
         long userId = 1L;
         List<Payment> payments = List.of(
-                new Payment(1L, 10_000, PaymentStatus.PENDING),
-                new Payment(2L, 20_000, PaymentStatus.COMPLETED)
+                new Payment(1L, BigDecimal.valueOf(10_000), PaymentStatus.PENDING),
+                new Payment(2L, BigDecimal.valueOf(20_000), PaymentStatus.COMPLETED)
         );
 
         when(paymentRepository.findByUserId(userId)).thenReturn(payments);
@@ -73,8 +74,8 @@ class PaymentServiceTest {
         // then
         assertThat(result).extracting("orderId", "paymentPrice", "paymentStatus")
                 .containsExactly(
-                        Tuple.tuple(1L, 10_000, PaymentStatus.PENDING),
-                        Tuple.tuple(2L, 20_000, PaymentStatus.COMPLETED)
+                        Tuple.tuple(1L, BigDecimal.valueOf(10_000), PaymentStatus.PENDING),
+                        Tuple.tuple(2L, BigDecimal.valueOf(20_000), PaymentStatus.COMPLETED)
                 );
     }
 

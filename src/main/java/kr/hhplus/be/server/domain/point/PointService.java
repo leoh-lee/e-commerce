@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -20,7 +22,7 @@ public class PointService {
     private final PointHistoryRepository pointHistoryRepository;
 
     @Transactional
-    public PointUseResult usePoint(Long userId, int amount) {
+    public PointUseResult usePoint(Long userId, BigDecimal amount) {
         Point findPoint = findPointByUserId(userId, true);
         findPoint.usePoint(amount);
 
@@ -28,7 +30,7 @@ public class PointService {
     }
 
     @Transactional
-    public PointChargeResult chargePoint(Long userId, int amount) {
+    public PointChargeResult chargePoint(Long userId, BigDecimal amount) {
         Point findPoint = findPointByUserId(userId, true);
         findPoint.chargePoint(amount);
 
@@ -48,7 +50,7 @@ public class PointService {
 
     @Transactional
     public void createDefaultPoint(Long userId) {
-        Point point = new Point(userId, 0);
+        Point point = new Point(userId, BigDecimal.ZERO);
 
         pointRepository.save(point);
     }

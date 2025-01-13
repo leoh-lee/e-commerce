@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.domain.order.dto;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public record OrderDto(
@@ -7,8 +8,8 @@ public record OrderDto(
         List<OrderProductDto> orderProductDtos,
         Long couponId,
         Long userCouponId,
-        int basePrice,
-        int discountPrice,
-        int finalPrice
+        BigDecimal basePrice,
+        BigDecimal discountPrice,
+        BigDecimal finalPrice
 ) {
 }

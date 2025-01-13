@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -22,8 +23,8 @@ public class ProductController implements ProductApi {
     public ApiResponse<PageResponse<ProductSearchResponse>> searchProducts() {
 
         List<ProductSearchResponse> result = List.of(
-                new ProductSearchResponse(1L, "상품1", 10_000, 100),
-                new ProductSearchResponse(2L, "상품2", 20_000, 200)
+                new ProductSearchResponse(1L, "상품1", BigDecimal.valueOf(10_000), 100),
+                new ProductSearchResponse(2L, "상품2", BigDecimal.valueOf(20_000), 200)
         );
 
         Page<ProductSearchResponse> pageResult = new PageImpl<>(result);

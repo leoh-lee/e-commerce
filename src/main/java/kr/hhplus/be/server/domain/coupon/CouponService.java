@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -88,13 +89,13 @@ public class CouponService {
     }
 
     @Transactional
-    public CouponUseResult useCoupon(Long userCouponId, int price) {
+    public CouponUseResult useCoupon(Long userCouponId, BigDecimal price) {
         UserCouponDto userCouponDto = userCouponRepository.findByIdWithCoupon(userCouponId);
 
         UserCoupon userCoupon = userCouponDto.userCoupon();
         Coupon coupon = userCouponDto.coupon();
 
-        int discountPrice = coupon.getDiscountPrice(price);
+        BigDecimal discountPrice = coupon.getDiscountPrice(price);
         userCoupon.changeUseStatus(dateTimeProvider.getLocalDateTimeNow());
 
         return CouponUseResult.of(userCoupon, price, discountPrice);

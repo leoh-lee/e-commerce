@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @RestController
@@ -29,9 +30,9 @@ public class OrderController implements OrderApi {
                 1L,
                 1L,
                 1L,
-                30_000,
-                12_000,
-                18_000
+                BigDecimal.valueOf(30_000),
+                BigDecimal.valueOf(12_000),
+                BigDecimal.valueOf(18_000)
         );
 
         return ApiResponse.ok(result, ResponseCode.SUCCESS_ORDER);

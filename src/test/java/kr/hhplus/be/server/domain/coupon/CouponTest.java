@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.*;
@@ -57,13 +58,13 @@ class CouponTest {
         CouponInfo couponInfo = new CouponInfo("10,000원 할인쿠폰", CouponType.FIXED, 10);
         DiscountInfo discountInfo = new DiscountInfo(10_000, null);
         Coupon coupon = new Coupon(couponInfo, discountInfo, null);
-        int price = 9_900;
+        BigDecimal price = BigDecimal.valueOf(9_900);
 
         // when
-        int discountPrice = coupon.getDiscountPrice(price);
+        BigDecimal discountPrice = coupon.getDiscountPrice(price);
 
         // then
-        assertThat(discountPrice).isEqualTo(price);
+        assertThat(discountPrice).isEqualByComparingTo(price);
     }
 
     @ParameterizedTest
@@ -76,10 +77,10 @@ class CouponTest {
         Coupon coupon = new Coupon(couponInfo, discountInfo, null);
 
         // when
-        int discountedPrice = coupon.getDiscountPrice(price);
+        BigDecimal discountedPrice = coupon.getDiscountPrice(BigDecimal.valueOf(price));
 
         // then
-        assertThat(discountedPrice).isEqualTo(result);
+        assertThat(discountedPrice).isEqualByComparingTo(BigDecimal.valueOf(result));
     }
 
     @ParameterizedTest
@@ -92,10 +93,10 @@ class CouponTest {
         Coupon coupon = new Coupon(couponInfo, discountInfo, null);
 
         // when
-        int discountedPrice = coupon.getDiscountPrice(price);
+        BigDecimal discountedPrice = coupon.getDiscountPrice(BigDecimal.valueOf(price));
 
         // then
-        assertThat(discountedPrice).isEqualTo(result);
+        assertThat(discountedPrice).isEqualByComparingTo(BigDecimal.valueOf(result));
     }
 
 }

@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.application.product;
 
+import kr.hhplus.be.server.support.IntegrationTest;
 import kr.hhplus.be.server.application.product.dto.ProductSearchRequest;
 import kr.hhplus.be.server.domain.product.Product;
 import kr.hhplus.be.server.domain.product.ProductRepository;
@@ -11,20 +12,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
-import org.testcontainers.junit.jupiter.Testcontainers;
+
+import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.*;
 
-@SpringBootTest
-@ActiveProfiles("test")
-@Testcontainers
-class ProductFacadeTest {
+class ProductFacadeTest extends IntegrationTest {
 
     @Autowired
     private ProductFacade productFacade;
@@ -39,7 +36,7 @@ class ProductFacadeTest {
     @Transactional
     void setUp() {
         for (int i = 1; i <= 100; i++) {
-            Product product = new Product("상품명" + i, i * 1000);
+            Product product = new Product("상품명" + i, BigDecimal.valueOf(i * 1000));
             productRepository.save(product);
             ProductStock productStock = new ProductStock(product, 0);
             productStockRepository.save(productStock);
@@ -50,7 +47,7 @@ class ProductFacadeTest {
     @DisplayName("상품 목록을 조회한다.")
     void getProducts() {
         // given
-        ProductSearchRequest searchRequest = new ProductSearchRequest("상품명", 5000, 10000);
+        ProductSearchRequest searchRequest = new ProductSearchRequest("상품명", BigDecimal.valueOf(5_000), BigDecimal.valueOf(10_000));
 
         Pageable pageable = PageRequest.of(0, 10);
 
@@ -59,14 +56,14 @@ class ProductFacadeTest {
 
         // then
         assertThat(products.getContent())
-                .extracting("name", "price")
+                .extracting(ProductSearchResponse::name, product -> product.price().intValue())
                 .containsExactly(
-                        Tuple.tuple("상품명5", 5000),
-                        Tuple.tuple("상품명6", 6000),
-                        Tuple.tuple("상품명7", 7000),
-                        Tuple.tuple("상품명8", 8000),
-                        Tuple.tuple("상품명9", 9000),
-                        Tuple.tuple("상품명10", 10000)
+                        Tuple.tuple("상품명5", 5_000),
+                        Tuple.tuple("상품명6", 6_000),
+                        Tuple.tuple("상품명7", 7_000),
+                        Tuple.tuple("상품명8", 8_000),
+                        Tuple.tuple("상품명9", 9_000),
+                        Tuple.tuple("상품명10",10_000)
                 );
     }
 

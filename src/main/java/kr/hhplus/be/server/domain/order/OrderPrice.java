@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Embeddable
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -14,12 +16,12 @@ import lombok.NoArgsConstructor;
 public class OrderPrice {
 
     @JoinColumn(nullable = false)
-    private int basePrice;
+    private BigDecimal basePrice;
 
     @JoinColumn(nullable = false)
-    private int discountAmount;
+    private BigDecimal discountAmount;
 
     @JoinColumn(nullable = false)
-    private int finalPrice;
+    private BigDecimal finalPrice;
 
 }

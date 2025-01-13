@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -21,13 +23,13 @@ public class Payment extends BaseEntity {
     private Long orderId;
 
     @Column(nullable = false)
-    private int paymentPrice;
+    private BigDecimal paymentPrice;
 
     @Enumerated
     @Column(nullable = false)
     private PaymentStatus paymentStatus;
 
-    public Payment(Long orderId, int paymentPrice, PaymentStatus paymentStatus) {
+    public Payment(Long orderId, BigDecimal paymentPrice, PaymentStatus paymentStatus) {
         this.orderId = orderId;
         this.paymentPrice = paymentPrice;
         this.paymentStatus = paymentStatus;

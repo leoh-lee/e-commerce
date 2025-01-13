@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -72,8 +73,8 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     private BooleanExpression betweenPrice(QProduct product, ProductSearchDto searchDto) {
-        Integer minPrice = searchDto.minPrice();
-        Integer maxPrice = searchDto.maxPrice();
+        BigDecimal minPrice = searchDto.minPrice();
+        BigDecimal maxPrice = searchDto.maxPrice();
 
         if (ObjectUtils.isEmpty(minPrice) || ObjectUtils.isEmpty(maxPrice)) {
             return null;

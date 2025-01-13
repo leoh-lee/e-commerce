@@ -1,22 +1,16 @@
 package kr.hhplus.be.server.application.coupon;
 
+import kr.hhplus.be.server.support.IntegrationTest;
 import kr.hhplus.be.server.domain.coupon.*;
 import kr.hhplus.be.server.domain.coupon.enums.CouponType;
 import kr.hhplus.be.server.domain.user.User;
 import kr.hhplus.be.server.domain.user.UserRepository;
-import kr.hhplus.be.server.infrastructures.core.coupon.CouponJpaRepository;
-import kr.hhplus.be.server.infrastructures.core.coupon.UserCouponJpaRepository;
-import kr.hhplus.be.server.infrastructures.core.user.UserJpaRepository;
 import kr.hhplus.be.server.interfaces.api.coupon.request.CouponIssueRequest;
 import kr.hhplus.be.server.interfaces.api.coupon.response.CouponIssueResponse;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -26,10 +20,7 @@ import java.util.concurrent.*;
 
 import static org.assertj.core.api.Assertions.*;
 
-@SpringBootTest
-@ActiveProfiles("test")
-@Testcontainers
-public class CouponFacadeConcurrencyTest {
+public class CouponFacadeConcurrencyTest extends IntegrationTest {
 
     @Autowired
     private CouponFacade couponFacade;
@@ -42,15 +33,6 @@ public class CouponFacadeConcurrencyTest {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private UserJpaRepository userJpaRepository;
-
-    @Autowired
-    private UserCouponJpaRepository userCouponJpaRepository;
-
-    @Autowired
-    private CouponJpaRepository couponJpaRepository;
 
     private Long couponId;
     private Long userId;
@@ -69,13 +51,6 @@ public class CouponFacadeConcurrencyTest {
         User user = new User("user1");
         userRepository.save(user);
         userId = user.getId();
-    }
-
-    @AfterEach
-    void tearDown() {
-        userJpaRepository.deleteAllInBatch();
-        couponJpaRepository.deleteAllInBatch();
-        userCouponJpaRepository.deleteAllInBatch();
     }
 
     @Test

@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -71,9 +72,9 @@ class OrderServiceTest {
         long userId = 1L;
         long couponId = 1L;
         long userCouponId = 1L;
-        int basePrice = 20_000;
-        int discountPrice = 10_000;
-        int finalPrice = 10_000;
+        BigDecimal basePrice = BigDecimal.valueOf(20_000);
+        BigDecimal discountPrice = BigDecimal.valueOf(10_000);
+        BigDecimal finalPrice = BigDecimal.valueOf(10_000);
 
         OrderDto orderDto = new OrderDto(userId, orderProductDtos, couponId, userCouponId, basePrice, discountPrice, finalPrice);
         doNothing().when(orderRepository).save(any());

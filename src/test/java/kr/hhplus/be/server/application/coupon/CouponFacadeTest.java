@@ -1,24 +1,18 @@
 package kr.hhplus.be.server.application.coupon;
 
+import kr.hhplus.be.server.support.IntegrationTest;
 import kr.hhplus.be.server.domain.coupon.*;
 import kr.hhplus.be.server.domain.coupon.enums.CouponType;
 import kr.hhplus.be.server.domain.coupon.enums.UserCouponStatus;
 import kr.hhplus.be.server.domain.user.User;
 import kr.hhplus.be.server.domain.user.UserRepository;
-import kr.hhplus.be.server.infrastructures.core.coupon.CouponJpaRepository;
-import kr.hhplus.be.server.infrastructures.core.coupon.UserCouponJpaRepository;
-import kr.hhplus.be.server.infrastructures.core.user.UserJpaRepository;
 import kr.hhplus.be.server.interfaces.api.coupon.request.CouponIssueRequest;
 import kr.hhplus.be.server.interfaces.api.coupon.response.AvailableCouponResponse;
 import kr.hhplus.be.server.interfaces.api.coupon.response.CouponIssueResponse;
 import kr.hhplus.be.server.interfaces.api.coupon.response.UserCouponSearchResponse;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -26,11 +20,8 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
-@SpringBootTest
-@ActiveProfiles("test")
-@Testcontainers
 @Transactional
-class CouponFacadeTest {
+class CouponFacadeTest extends IntegrationTest {
 
     @Autowired
     private CouponFacade couponFacade;
@@ -43,22 +34,6 @@ class CouponFacadeTest {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private UserJpaRepository userJpaRepository;
-
-    @Autowired
-    private UserCouponJpaRepository userCouponJpaRepository;
-
-    @Autowired
-    private CouponJpaRepository couponJpaRepository;
-
-    @AfterEach
-    void tearDown() {
-        userJpaRepository.deleteAllInBatch();
-        userCouponJpaRepository.deleteAllInBatch();
-        couponJpaRepository.deleteAllInBatch();
-    }
 
     @Test
     void issueCoupon_success() {
@@ -122,6 +97,7 @@ class CouponFacadeTest {
 
         User user = new User("user");
         userRepository.save(user);
+
         Long userId = user.getId();
 
         userCouponRepository.save(new UserCoupon(userId, couponIds.getFirst(), UserCouponStatus.ISSUED, null, null));

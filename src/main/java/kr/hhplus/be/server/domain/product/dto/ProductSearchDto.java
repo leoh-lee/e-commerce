@@ -1,8 +1,10 @@
 package kr.hhplus.be.server.domain.product.dto;
 
+import java.math.BigDecimal;
+
 public record ProductSearchDto(
     String productName,
-    Integer minPrice,
-    Integer maxPrice
+    BigDecimal minPrice,
+    BigDecimal maxPrice
 ) {
 }

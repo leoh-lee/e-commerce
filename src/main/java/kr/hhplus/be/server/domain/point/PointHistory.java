@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -26,11 +28,12 @@ public class PointHistory extends BaseEntity {
     private PointTransactionType transactionType;
 
     @Column(nullable = false)
-    private int amount;
+    private BigDecimal amount;
 
-    public PointHistory(Point point, PointTransactionType transactionType, int amount) {
+    public PointHistory(Point point, PointTransactionType transactionType, BigDecimal amount) {
         this.point = point;
         this.transactionType = transactionType;
         this.amount = amount;
     }
+
 }
