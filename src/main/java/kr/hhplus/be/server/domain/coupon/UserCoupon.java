@@ -52,7 +52,7 @@ public class UserCoupon extends BaseEntity {
     }
 
     public void changeUseStatus(LocalDateTime now) {
-        if (!userCouponStatus.isIssued() || expiredDate.isAfter(now)) {
+        if (!userCouponStatus.isIssued() || expiredDate.isBefore(now)) {
             throw new CouponNotUsableException();
         }
 

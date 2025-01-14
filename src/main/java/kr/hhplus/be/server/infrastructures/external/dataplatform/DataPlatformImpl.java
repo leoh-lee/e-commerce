@@ -6,6 +6,6 @@ import org.springframework.stereotype.Component;
 public class DataPlatformImpl implements DataPlatform {
     @Override
     public DataPlatformSendResponse send(DataPlatformSendRequest data) {
-        return null;
+        return new DataPlatformSendResponse();
     }
 }

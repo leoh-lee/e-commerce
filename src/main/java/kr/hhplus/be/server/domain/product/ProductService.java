@@ -1,18 +1,19 @@
 package kr.hhplus.be.server.domain.product;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
 import kr.hhplus.be.server.domain.order.dto.OrderProductDto;
 import kr.hhplus.be.server.domain.product.dto.ProductSearchDto;
 import kr.hhplus.be.server.domain.product.dto.ProductSearchResult;
 import kr.hhplus.be.server.domain.product.exception.ProductNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -39,6 +40,11 @@ public class ProductService {
                 .map(OrderProductDto::productId).toList();
 
         List<Product> products = productRepository.findByIds(productIds);
+
+        // 하나라도 없으면? 어떻게 해야할까
+        if (productIds.size() != products.size()) {
+            throw new ProductNotFoundException();
+        }
 
         return products.stream()
                 .map(product -> product.getProductPrice().multiply(BigDecimal.valueOf(productQuantityMap.get(product.getId()))))
