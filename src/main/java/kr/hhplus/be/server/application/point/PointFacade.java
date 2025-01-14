@@ -3,8 +3,8 @@ package kr.hhplus.be.server.application.point;
 import kr.hhplus.be.server.domain.point.PointService;
 import kr.hhplus.be.server.domain.point.dto.PointChargeResult;
 import kr.hhplus.be.server.domain.point.dto.PointSearchResult;
-import kr.hhplus.be.server.domain.user.UserSearchResult;
 import kr.hhplus.be.server.domain.user.UserService;
+import kr.hhplus.be.server.domain.user.exception.UserNotFoundException;
 import kr.hhplus.be.server.infrastructures.external.dataplatform.DataPlatform;
 import kr.hhplus.be.server.infrastructures.external.dataplatform.DataPlatformSendRequest;
 import kr.hhplus.be.server.infrastructures.external.dataplatform.RequestType;
@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class PointFacade {
 
     private final PointService pointService;
@@ -26,10 +26,12 @@ public class PointFacade {
     private final DataPlatform dataPlatform;
     private final DateTimeProvider dateTimeProvider;
 
-    @Transactional
     public PointChargeResponse chargePoint(PointChargeRequest pointChargeRequest) {
         Long userId = pointChargeRequest.userId();
-        UserSearchResult userResult = userService.getUserById(pointChargeRequest.userId());
+
+        if (!userService.existsById(pointChargeRequest.userId())) {
+            throw new UserNotFoundException();
+        }
 
         PointChargeResult pointChargeResult = pointService.chargePoint(userId, pointChargeRequest.amount());
 
@@ -38,8 +40,11 @@ public class PointFacade {
         return PointChargeResponse.from(pointChargeResult);
     }
 
+    @Transactional(readOnly = true)
     public PointSearchResponse searchPoint(Long userId) {
-        UserSearchResult userResult = userService.getUserById(userId);
+        if (!userService.existsById(userId)) {
+            throw new UserNotFoundException();
+        }
 
         PointSearchResult pointSearchResult = pointService.getPointByUserId(userId);
 

@@ -15,13 +15,12 @@ import java.math.BigDecimal;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class PointService {
 
     private final PointRepository pointRepository;
     private final PointHistoryRepository pointHistoryRepository;
 
-    @Transactional
     public PointUseResult usePoint(Long userId, BigDecimal amount) {
         Point findPoint = findPointByUserId(userId, true);
         findPoint.usePoint(amount);
@@ -29,26 +28,27 @@ public class PointService {
         return PointUseResult.fromEntity(findPoint);
     }
 
-    @Transactional
     public PointChargeResult chargePoint(Long userId, BigDecimal amount) {
         Point findPoint = findPointByUserId(userId, true);
         findPoint.chargePoint(amount);
 
+        // chargePoint에 history 저장 책임이 있는 것이 무겁다..
         PointHistory pointHistory = new PointHistory(findPoint, PointTransactionType.CHARGE, amount);
         pointHistoryRepository.save(pointHistory);
 
         return PointChargeResult.fromEntity(findPoint);
     }
 
+    @Transactional(readOnly = true)
     public PointSearchResult getPointByUserId(long userId) {
         return PointSearchResult.fromEntity(findPointByUserId(userId, false));
     }
 
+    @Transactional(readOnly = true)
     public Page<PointHistorySearchResult> getPointHistoriesByUserId(long userId, Pageable pageable) {
         return pointHistoryRepository.findByUserId(userId, pageable).map(PointHistorySearchResult::fromEntity);
     }
 
-    @Transactional
     public void createDefaultPoint(Long userId) {
         Point point = new Point(userId, BigDecimal.ZERO);
 

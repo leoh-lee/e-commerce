@@ -3,11 +3,13 @@ package kr.hhplus.be.server.support;
 import kr.hhplus.be.server.domain.coupon.*;
 import kr.hhplus.be.server.domain.coupon.enums.CouponType;
 import kr.hhplus.be.server.domain.coupon.enums.UserCouponStatus;
+import kr.hhplus.be.server.domain.point.Point;
 import kr.hhplus.be.server.domain.product.Product;
 import kr.hhplus.be.server.domain.product.ProductStock;
 import kr.hhplus.be.server.domain.user.User;
 import kr.hhplus.be.server.infrastructures.core.coupon.CouponJpaRepository;
 import kr.hhplus.be.server.infrastructures.core.coupon.UserCouponJpaRepository;
+import kr.hhplus.be.server.infrastructures.core.point.PointJpaRepository;
 import kr.hhplus.be.server.infrastructures.core.product.ProductJpaRepository;
 import kr.hhplus.be.server.infrastructures.core.product.ProductStockJpaRepository;
 import kr.hhplus.be.server.infrastructures.core.user.UserJpaRepository;
@@ -26,6 +28,7 @@ import java.time.LocalDateTime;
 @Transactional
 public class TestDataBuilder {
     private final UserJpaRepository userJpaRepository;
+    private final PointJpaRepository pointJpaRepository;
     private final ProductJpaRepository productJpaRepository;
     private final ProductStockJpaRepository productStockJpaRepository;
     private final CouponJpaRepository couponJpaRepository;
@@ -45,6 +48,11 @@ public class TestDataBuilder {
 
     public User createUser(String name) {
         return userJpaRepository.save(new User(name));
+    }
+
+    public Point createPoint(Long userId, BigDecimal balance) {
+        Point point = new Point(userId, balance);
+        return pointJpaRepository.save(point);
     }
 
     public Coupon createCoupon(String name, CouponType couponType, int couponStock, Integer discountAmount, Integer discountRate) {
