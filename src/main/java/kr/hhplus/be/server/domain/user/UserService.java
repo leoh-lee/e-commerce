@@ -26,4 +26,8 @@ public class UserService {
         return UserCreateResult.fromEntity(user);
     }
 
+    public boolean existsById(Long userId) {
+        return userRepository.existsById(userId);
+    }
+
 }

@@ -1,11 +1,12 @@
 package kr.hhplus.be.server.infrastructures.core.user;
 
+import java.util.Optional;
+
+import org.springframework.stereotype.Repository;
+
 import kr.hhplus.be.server.domain.user.User;
 import kr.hhplus.be.server.domain.user.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -21,6 +22,11 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public void save(User user) {
         userJpaRepository.save(user);
+    }
+
+    @Override
+    public boolean existsById(Long userId) {
+        return userJpaRepository.existsById(userId);
     }
 
 }
