@@ -25,9 +25,9 @@ class OrderRepositoryTest extends RepositoryTest {
         long otherUserId = 2L;
 
         OrderPrice orderPrice = new OrderPrice(BigDecimal.valueOf(20_000), BigDecimal.valueOf(10_000), BigDecimal.valueOf(10_000));
-        Order order1 = new Order(userId, 1L, orderPrice);
-        Order order2 = new Order(userId, 2L, orderPrice);
-        Order order3 = new Order(otherUserId, 2L, orderPrice);
+        Order order1 = new Order(userId, 1L, orderPrice, OrderStatus.ORDERED);
+        Order order2 = new Order(userId, 2L, orderPrice, OrderStatus.ORDERED);
+        Order order3 = new Order(otherUserId, 2L, orderPrice, OrderStatus.PAYED);
 
         orderRepository.save(order1);
         orderRepository.save(order2);

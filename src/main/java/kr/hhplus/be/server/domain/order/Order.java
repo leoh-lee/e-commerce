@@ -25,9 +25,21 @@ public class Order extends BaseEntity {
     @Embedded
     private OrderPrice orderPrice;
 
-    public Order(Long userId, Long userCouponId, OrderPrice orderPrice) {
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
+
+    public Order(Long userId, Long userCouponId, OrderPrice orderPrice, OrderStatus orderStatus) {
         this.userId = userId;
         this.userCouponId = userCouponId;
         this.orderPrice = orderPrice;
+        this.orderStatus = orderStatus;
+    }
+
+    public void updatePayed() {
+        if (orderStatus == OrderStatus.PAYED) {
+            return;
+        }
+
+        orderStatus = OrderStatus.PAYED;
     }
 }

@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -39,9 +40,9 @@ class OrderServiceTest {
         long userId = 1L;
         OrderPrice orderPrice = new OrderPrice();
         List<Order> orders = List.of(
-                new Order(userId, 1L, orderPrice),
-                new Order(userId, 1L, orderPrice),
-                new Order(userId, 1L, orderPrice)
+                new Order(userId, 1L, orderPrice, OrderStatus.ORDERED),
+                new Order(userId, 1L, orderPrice, OrderStatus.PAYED),
+                new Order(userId, 1L, orderPrice, OrderStatus.ORDERED)
         );
 
         Pageable pageable = PageRequest.of(0, 2);
@@ -112,6 +113,20 @@ class OrderServiceTest {
                         tuple(rank2.getProductId(), rank2.getOrderCount(), rank2.getRank()),
                         tuple(rank3.getProductId(), rank3.getOrderCount(), rank3.getRank())
                 );
+    }
+
+    @Test
+    @DisplayName("주문 상태를 결제 상태로 변경한다.")
+    void updateOrderPayed_whenOrderNotExists_throwsOrderNotFoundException() {
+        // given
+        Order order = new Order(1L, 1L, new OrderPrice(BigDecimal.valueOf(10_000), BigDecimal.ZERO, BigDecimal.valueOf(10_000)), OrderStatus.ORDERED);
+        when(orderRepository.findById(any())).thenReturn(Optional.of(order));
+
+        // when
+        orderService.updateOrderStatusPayed(order.getId());
+
+        // then
+        assertThat(order.getOrderStatus()).isEqualTo(OrderStatus.PAYED);
     }
 
 }
