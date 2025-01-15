@@ -15,9 +15,12 @@ import kr.hhplus.be.server.infrastructures.external.dataplatform.RequestType;
 import kr.hhplus.be.server.interfaces.api.order.request.OrderProductsRequest;
 import kr.hhplus.be.server.interfaces.api.order.request.OrderRequest;
 import kr.hhplus.be.server.interfaces.api.order.response.OrderResponse;
+import kr.hhplus.be.server.interfaces.api.order.response.OrderSearchResponse;
 import kr.hhplus.be.server.interfaces.api.order.response.OrderTopSearchResponse;
 import kr.hhplus.be.server.support.util.DateTimeProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -87,6 +90,11 @@ public class OrderFacade {
         dataPlatform.send(new DataPlatformSendRequest<>(userId, RequestType.ORDER, dateTimeProvider.getLocalDateTimeNow(), orderResult));
 
         return OrderResponse.from(orderResult);
+    }
+
+    public Page<OrderSearchResponse> getOrdersByUserId(Long userId, Pageable pageable) {
+        return orderService.getOrdersByUserId(userId, pageable)
+                .map(OrderSearchResponse::from);
     }
 
     public List<OrderTopSearchResponse> searchTopOrder(int topCount) {

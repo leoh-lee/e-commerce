@@ -4,9 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
+import kr.hhplus.be.server.domain.order.Order;
+import kr.hhplus.be.server.interfaces.api.order.response.OrderSearchResponse;
 import kr.hhplus.be.server.support.TestDataPlatform;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -38,6 +37,10 @@ import kr.hhplus.be.server.interfaces.api.order.request.OrderRequest;
 import kr.hhplus.be.server.interfaces.api.order.response.OrderResponse;
 import kr.hhplus.be.server.support.IntegrationTest;
 import kr.hhplus.be.server.support.TestDataBuilder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+
+import static org.assertj.core.api.Assertions.*;
 
 class OrderFacadeIntegrationTest extends IntegrationTest {
 
@@ -259,6 +262,21 @@ class OrderFacadeIntegrationTest extends IntegrationTest {
         assertThat(testDataPlatform.getSentCount()).isEqualTo(platformSentCount + 1);
     }
 
+    @Test
+    @DisplayName("사용자 ID로 주문을 조회한다.")
+    void getOrdersByUserId_whenSuccess() {
+        // given
+        Order order1 = testDataBuilder.createOrder(user.getId(), null, 30000);
+        Order order2 = testDataBuilder.createOrder(user.getId(), null, 60000);
+
+        // when
+        Page<OrderSearchResponse> orders = orderFacade.getOrdersByUserId(user.getId(), PageRequest.of(0, 10));
+
+        // then
+        assertThat(orders.getContent().getFirst().id()).isEqualTo(order1.getId());
+        assertThat(orders.getContent().getLast().id()).isEqualTo(order2.getId());
+    }
+    
     private OrderRequest createOrderRequest(Long userId, List<OrderProductsRequest> products) {
         return new OrderRequest(userId, products, null);
     }

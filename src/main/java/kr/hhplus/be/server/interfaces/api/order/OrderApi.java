@@ -1,7 +1,6 @@
 package kr.hhplus.be.server.interfaces.api.order;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -27,7 +26,6 @@ public interface OrderApi {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "상품을 찾을 수 없습니다.", content = @Content(mediaType = "application/json",
                         examples = @ExampleObject(value = "{ \"code\": \"5100\", \"message\": \"상품을 찾을 수 없습니다.\" }")))
     })
-    @PostMapping
     ApiResponse<OrderResponse> order(@RequestBody OrderRequest orderRequest);
 
     @Operation(summary = "주문 목록을 조회한다", description = "주문 목록을 조회한다")
@@ -38,7 +36,6 @@ public interface OrderApi {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "주문 목록 조회 실패", content = @Content(mediaType = "application/json",
                         examples = @ExampleObject(value = "{ \"code\": \"5300\", \"message\": \"주문 목록 조회 실패\" }")))
     })
-    @GetMapping
-    ApiResponse<PageResponse<OrderSearchResponse>> searchOrders(@RequestParam Long userId);
+    ApiResponse<PageResponse<OrderSearchResponse>> searchOrders(@RequestParam Long userId, Pageable pageable);
 
 }
