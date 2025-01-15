@@ -6,7 +6,7 @@ import kr.hhplus.be.server.domain.coupon.dto.UserCouponSearchResult;
 public record UserCouponSearchResponse(
         Long id,
         String name,
-        String type,
+        String status,
         Integer discountAmount,
         Integer discountRate
 ) {

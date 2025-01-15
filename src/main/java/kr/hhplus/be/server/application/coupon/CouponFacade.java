@@ -2,10 +2,8 @@ package kr.hhplus.be.server.application.coupon;
 
 import kr.hhplus.be.server.domain.coupon.CouponService;
 import kr.hhplus.be.server.domain.coupon.dto.CouponIssueResult;
-import kr.hhplus.be.server.domain.coupon.dto.CouponSearchResult;
-import kr.hhplus.be.server.domain.coupon.dto.UserCouponSearchResult;
-import kr.hhplus.be.server.domain.user.UserSearchResult;
 import kr.hhplus.be.server.domain.user.UserService;
+import kr.hhplus.be.server.domain.user.exception.UserNotFoundException;
 import kr.hhplus.be.server.infrastructures.external.dataplatform.DataPlatform;
 import kr.hhplus.be.server.infrastructures.external.dataplatform.DataPlatformSendRequest;
 import kr.hhplus.be.server.infrastructures.external.dataplatform.RequestType;
@@ -22,7 +20,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class CouponFacade {
 
     private final UserService userService;
@@ -30,11 +28,12 @@ public class CouponFacade {
     private final DataPlatform dataPlatform;
     private final DateTimeProvider dateTimeProvider;
 
-    @Transactional
     public CouponIssueResponse issueCoupon(CouponIssueRequest couponIssueRequest) {
         Long userId = couponIssueRequest.userId();
 
-        UserSearchResult userById = userService.getUserById(userId);
+        if (!userService.existsById(userId)) {
+            throw new UserNotFoundException();
+        }
 
         CouponIssueResult couponIssueResult = couponService.issueCoupon(userId, couponIssueRequest.couponId());
 
@@ -43,6 +42,7 @@ public class CouponFacade {
         return CouponIssueResponse.from(couponIssueResult);
     }
 
+    @Transactional(readOnly = true)
     public List<UserCouponSearchResponse> getUserCoupons(Long userId) {
         return couponService.getUserCoupons(userId)
                 .stream()
@@ -50,6 +50,7 @@ public class CouponFacade {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
     public List<AvailableCouponResponse> getIssuableCoupons(Long userId) {
         return couponService.getIssuableCoupons(userId)
                 .stream()
