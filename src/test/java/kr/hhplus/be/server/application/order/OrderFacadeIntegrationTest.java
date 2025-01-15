@@ -240,6 +240,8 @@ class OrderFacadeIntegrationTest extends IntegrationTest {
         );
 
         OrderRequest orderRequest = createOrderRequestWithCoupon(user.getId(), userCoupon.getId(), orderProductsRequests);
+        TestDataPlatform testDataPlatform = (TestDataPlatform) dataPlatform;
+        Integer platformSentCount = testDataPlatform.getSentCount();
 
         // when
         OrderResponse orderResponse = orderFacade.order(orderRequest);
@@ -254,8 +256,7 @@ class OrderFacadeIntegrationTest extends IntegrationTest {
                 .usingComparatorForType(BigDecimal::compareTo, BigDecimal.class)
                 .containsExactly(orderResponse.id(), user.getId(), userCoupon.getId());
 
-        TestDataPlatform dataPlatform1 = (TestDataPlatform) dataPlatform;
-        assertThat(dataPlatform1.getSentCount()).isEqualTo(1);
+        assertThat(testDataPlatform.getSentCount()).isEqualTo(platformSentCount + 1);
     }
 
     private OrderRequest createOrderRequest(Long userId, List<OrderProductsRequest> products) {
