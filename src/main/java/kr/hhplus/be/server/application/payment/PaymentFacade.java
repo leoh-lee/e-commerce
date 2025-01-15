@@ -5,8 +5,8 @@ import kr.hhplus.be.server.domain.order.dto.OrderSearchResult;
 import kr.hhplus.be.server.domain.payment.PaymentService;
 import kr.hhplus.be.server.domain.payment.dto.PaymentResult;
 import kr.hhplus.be.server.domain.point.PointService;
-import kr.hhplus.be.server.domain.user.UserSearchResult;
 import kr.hhplus.be.server.domain.user.UserService;
+import kr.hhplus.be.server.domain.user.exception.UserNotFoundException;
 import kr.hhplus.be.server.infrastructures.external.dataplatform.DataPlatform;
 import kr.hhplus.be.server.infrastructures.external.dataplatform.DataPlatformSendRequest;
 import kr.hhplus.be.server.infrastructures.external.dataplatform.RequestType;
@@ -33,13 +33,20 @@ public class PaymentFacade {
 
     @Transactional
     public PaymentResponse payment(PaymentRequest paymentRequest) {
+
+        Long userId = paymentRequest.userId();
+
+        if (!userService.existsById(userId)) {
+            throw new UserNotFoundException();
+        }
+
         Long orderId = paymentRequest.orderId();
 
         OrderSearchResult order = orderService.getOrderById(orderId);
-        Long userId = order.userId();
+
         BigDecimal finalPrice = order.finalPrice();
 
-        UserSearchResult userById = userService.getUserById(userId);
+        orderService.updateOrderStatusPayed(order.id());
 
         PaymentResult paymentResult = paymentService.save(orderId, finalPrice);
         pointService.usePoint(userId, finalPrice);

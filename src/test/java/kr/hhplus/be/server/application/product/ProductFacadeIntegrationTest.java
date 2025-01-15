@@ -21,7 +21,7 @@ import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.*;
 
-class ProductFacadeTest extends IntegrationTest {
+class ProductFacadeIntegrationTest extends IntegrationTest {
 
     @Autowired
     private ProductFacade productFacade;
