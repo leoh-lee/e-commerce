@@ -1,4 +1,6 @@
 package kr.hhplus.be.server.domain.payment.exception;
 
-public class PaymentNotFoundException extends RuntimeException {
+import kr.hhplus.be.server.domain.common.exception.ResourceNotFoundException;
+
+public class PaymentNotFoundException extends ResourceNotFoundException {
 }

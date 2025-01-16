@@ -1,4 +1,6 @@
 package kr.hhplus.be.server.domain.point.exception;
 
-public class PointNotFoundException extends RuntimeException {
+import kr.hhplus.be.server.domain.common.exception.ResourceNotFoundException;
+
+public class PointNotFoundException extends ResourceNotFoundException {
 }

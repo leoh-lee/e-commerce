@@ -1,4 +1,6 @@
 package kr.hhplus.be.server.domain.user.exception;
 
-public class UserNotFoundException extends RuntimeException{
+import kr.hhplus.be.server.domain.common.exception.ResourceNotFoundException;
+
+public class UserNotFoundException extends ResourceNotFoundException {
 }

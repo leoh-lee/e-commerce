@@ -1,4 +1,6 @@
 package kr.hhplus.be.server.domain.product.exception;
 
-public class ProductNotFoundException extends RuntimeException {
+import kr.hhplus.be.server.domain.common.exception.ResourceNotFoundException;
+
+public class ProductNotFoundException extends ResourceNotFoundException {
 }

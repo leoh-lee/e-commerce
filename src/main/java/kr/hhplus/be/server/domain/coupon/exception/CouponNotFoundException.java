@@ -1,4 +1,6 @@
 package kr.hhplus.be.server.domain.coupon.exception;
 
-public class CouponNotFoundException extends RuntimeException {
+import kr.hhplus.be.server.domain.common.exception.ResourceNotFoundException;
+
+public class CouponNotFoundException extends ResourceNotFoundException {
 }
