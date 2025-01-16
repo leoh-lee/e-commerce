@@ -27,13 +27,13 @@ public class CouponController implements CouponApi {
 
     @Override
     @GetMapping
-    public ApiResponse<List<UserCouponSearchResponse>> searchUserCoupons(@RequestParam Long userId) {
+    public ApiResponse<List<UserCouponSearchResponse>> searchUserCoupons(@RequestParam("userId") Long userId) {
         return ApiResponse.ok(couponFacade.getUserCoupons(userId), ResponseCode.SUCCESS_SEARCH_USER_COUPON);
     }
 
     @Override
     @GetMapping("/available")
-    public ApiResponse<List<AvailableCouponResponse>> searchAvailableCoupons(@RequestParam Long userId) {
+    public ApiResponse<List<AvailableCouponResponse>> searchAvailableCoupons(@RequestParam("userId") Long userId) {
         return ApiResponse.ok(couponFacade.getIssuableCoupons(userId), ResponseCode.SUCCESS_SEARCH_AVAILABLE_COUPON);
     }
 

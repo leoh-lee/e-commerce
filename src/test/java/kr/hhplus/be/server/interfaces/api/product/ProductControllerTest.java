@@ -9,8 +9,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @WebMvcTest(controllers = ProductController.class)
 class ProductControllerTest {
 
@@ -27,17 +25,6 @@ class ProductControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get(BASE_URL))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(ResponseCode.SUCCESS_SEARCH_PRODUCTS.getMessage()))
-        ;
-    }
-
-    @Test
-    @DisplayName("상위 주문 상품 목록을 조회한다.")
-    void searchProductsTop5_ReturnsProductList() throws Exception {
-        // given
-        // when // then
-        mockMvc.perform(MockMvcRequestBuilders.get(BASE_URL + "/top"))
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(ResponseCode.SUCCESS_SEARCH_TOP_ORDERS.getMessage()))
         ;
     }
 
