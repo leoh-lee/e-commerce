@@ -31,6 +31,12 @@ public class Product extends BaseEntity {
         this.productPrice = productPrice;
     }
 
+    public Product(String productName, BigDecimal productPrice, ProductStock productStock) {
+        this.productName = productName;
+        this.productPrice = productPrice;
+        this.stock = productStock;
+    }
+
     public void addStock(ProductStock stock) {
         this.stock = stock;
         stock.setProduct(this);

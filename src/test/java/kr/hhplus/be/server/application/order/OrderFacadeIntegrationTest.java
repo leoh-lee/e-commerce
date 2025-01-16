@@ -113,10 +113,9 @@ class OrderFacadeIntegrationTest extends IntegrationTest {
         orderFacade.order(orderRequest);
 
         ProductSearchResult productSearchResult = productService.searchProduct(createdProduct.getId());
-        ProductStock stock = productSearchResult.stock();
 
         // then
-        assertThat(stock.getStock()).isEqualTo(baseStock - orderStock);
+        assertThat(productSearchResult.stock()).isEqualTo(baseStock - orderStock);
     }
 
     @ParameterizedTest
@@ -132,7 +131,7 @@ class OrderFacadeIntegrationTest extends IntegrationTest {
         assertThatThrownBy(() -> orderFacade.order(orderRequest))
                 .isInstanceOf(StockNotEnoughException.class);
                 
-        assertThat(productService.searchProduct(createdProduct.getId()).stock().getStock()).isEqualTo(baseStock);
+        assertThat(productService.searchProduct(createdProduct.getId()).stock()).isEqualTo(baseStock);
     }
     
     @Test
