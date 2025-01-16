@@ -29,7 +29,6 @@ public interface PointApi {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "포인트 충전 실패", content = @Content(mediaType = "application/json",
                         examples = @ExampleObject(value = "{ \"code\": \"5000\", \"message\": \"포인트 충전 실패\" }")))
     })
-    @PostMapping
     ApiResponse<PointChargeResponse> chargePoint(@Valid @RequestBody PointChargeRequest pointChargeRequest);
 
     @Operation(summary = "사용자의 포인트를 조회한다", description = "사용자의 포인트를 조회한다")
@@ -40,7 +39,6 @@ public interface PointApi {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "사용자 포인트 조회 실패", content = @Content(mediaType = "application/json",
                         examples = @ExampleObject(value = "{ \"code\": \"5002\", \"message\": \"사용자 포인트 조회 실패\" }")))
     })
-    @GetMapping("/{userId}")
     ApiResponse<PointSearchResponse> searchPoint(@PathVariable Long userId);
 
 }

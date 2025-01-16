@@ -23,7 +23,6 @@ public interface ProductApi {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "상품 목록 조회에 실패했습니다.", content = @Content(mediaType = "application/json",
                         examples = @ExampleObject(value = "{ \"code\": \"5100\", \"message\": \"상품 목록 조회에 실패했습니다.\" }")))
     })
-    @GetMapping
     ApiResponse<PageResponse<ProductSearchResponse>> searchProducts(
             ProductSearchRequest searchRequest,
             Pageable pageable

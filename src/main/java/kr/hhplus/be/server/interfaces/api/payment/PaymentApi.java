@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.interfaces.api.payment;
 
+import kr.hhplus.be.server.interfaces.api.payment.response.PaymentResponse;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -14,6 +15,9 @@ import kr.hhplus.be.server.interfaces.api.payment.request.PaymentSearchRequest;
 import kr.hhplus.be.server.interfaces.api.payment.response.PaymentSearchResponse;
 import kr.hhplus.be.server.support.http.response.ApiResponse;
 import kr.hhplus.be.server.support.http.response.PageResponse;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 @Tag(name = "payment", description = "결제 API")
 public interface PaymentApi {
@@ -28,8 +32,7 @@ public interface PaymentApi {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "결제 실패", content = @Content(mediaType = "application/json",
                         examples = @ExampleObject(value = "{ \"error\": \"PaymentFailed\", \"message\": \"결제 실패\" }")))
     })
-    @PostMapping
-    ApiResponse<Void> payment(@RequestBody PaymentRequest requestBody);
+    ApiResponse<PaymentResponse> payment(@RequestBody PaymentRequest requestBody);
 
     @Operation(summary = "결제 목록을 조회한다", description = "결제 목록을 조회한다")
     @ApiResponses(value = {
@@ -39,7 +42,6 @@ public interface PaymentApi {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "사용자를 찾을 수 없습니다.", content = @Content(mediaType = "application/json",
                         examples = @ExampleObject(value = "{ \"error\": \"UserNotFound\", \"message\": \"사용자를 찾을 수 없습니다.\" }")))
     })
-    @GetMapping
-    ApiResponse<PageResponse<PaymentSearchResponse>> searchPayments(PaymentSearchRequest paymentSearchRequest);
+    ApiResponse<List<PaymentSearchResponse>> searchPayments(@RequestParam Long userId);
 
 }

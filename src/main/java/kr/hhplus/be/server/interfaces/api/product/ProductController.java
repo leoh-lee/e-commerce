@@ -8,6 +8,7 @@ import kr.hhplus.be.server.support.http.response.PageResponse;
 import kr.hhplus.be.server.support.http.response.ResponseCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,6 +20,7 @@ public class ProductController implements ProductApi {
     private final ProductFacade productFacade;
 
     @Override
+    @GetMapping
     public ApiResponse<PageResponse<ProductSearchResponse>> searchProducts(
             ProductSearchRequest searchRequest,
             Pageable pageable
