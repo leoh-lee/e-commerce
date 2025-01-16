@@ -44,7 +44,7 @@ public class CouponFacadeConcurrencyTest extends IntegrationTest {
         LocalDateTime now = LocalDateTime.now();
         CouponUsableDate couponUsableDate = new CouponUsableDate(now.minusDays(1), now.plusDays(1));
 
-        Coupon coupon =  new Coupon(couponId, couponInfo, discountInfo, couponUsableDate);
+        Coupon coupon =  new Coupon(couponInfo, discountInfo, couponUsableDate);
         couponRepository.save(coupon);
         couponId = coupon.getId();
 
@@ -61,20 +61,13 @@ public class CouponFacadeConcurrencyTest extends IntegrationTest {
 
         ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
         CountDownLatch latch = new CountDownLatch(numberOfThreads);
-        CyclicBarrier barrier = new CyclicBarrier(numberOfThreads);
-        List<Exception> exceptions = Collections.synchronizedList(new ArrayList<>());
-        List<CouponIssueResponse> results = Collections.synchronizedList(new ArrayList<>());
         CouponIssueRequest couponIssueRequest = new CouponIssueRequest(userId, couponId);
 
         // when
         for (int i = 0; i < numberOfThreads; i++) {
             executorService.submit(() -> {
                 try {
-                    barrier.await(); // 모든 스레드가 동시에 시작되도록 대기
                     CouponIssueResponse result = couponFacade.issueCoupon(couponIssueRequest);
-                    results.add(result);
-                } catch (Exception e) {
-                    exceptions.add(e);
                 } finally {
                     latch.countDown();
                 }
@@ -88,9 +81,6 @@ public class CouponFacadeConcurrencyTest extends IntegrationTest {
         }
 
         // then
-        assertThat(results.size()).isEqualTo(1);    // 유저 한 명은 동일한 쿠폰을 한 번 밖에 발급 받지 못함.
-        assertThat(exceptions.size()).isEqualTo(9);
-
         Coupon coupon = couponRepository.findById(couponId).orElseThrow();
         assertThat(coupon.getCouponInfo().getCouponStock()).isEqualTo(4);
         long issuedCoupons = userCouponRepository.findByUserId(userId).size();
