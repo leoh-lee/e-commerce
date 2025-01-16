@@ -27,7 +27,7 @@ public class PaymentController implements PaymentApi {
 
     @Override
     @GetMapping
-    public ApiResponse<List<PaymentSearchResponse>> searchPayments(@RequestParam Long userId) {
+    public ApiResponse<List<PaymentSearchResponse>> searchPayments(@RequestParam("userId") Long userId) {
         return ApiResponse.ok(paymentFacade.searchPaymentsByUserId(userId), ResponseCode.SUCCESS_SEARCH_PAYMENT);
     }
 
