@@ -1,7 +1,16 @@
 package kr.hhplus.be.server.domain.order;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Version;
 import kr.hhplus.be.server.domain.common.BaseEntity;
+import kr.hhplus.be.server.domain.order.exception.AlreadyPayedOrderException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,6 +34,9 @@ public class Order extends BaseEntity {
     @Embedded
     private OrderPrice orderPrice;
 
+    @Version
+    private Long version;
+
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
@@ -37,9 +49,8 @@ public class Order extends BaseEntity {
 
     public void updatePayed() {
         if (orderStatus == OrderStatus.PAYED) {
-            return;
+            throw new AlreadyPayedOrderException();
         }
-
         orderStatus = OrderStatus.PAYED;
     }
 }

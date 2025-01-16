@@ -1,20 +1,27 @@
 package kr.hhplus.be.server.domain.order;
 
-import kr.hhplus.be.server.domain.order.dto.*;
-import kr.hhplus.be.server.domain.order.exception.OrderNotFoundException;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import jakarta.persistence.EntityManager;
+import kr.hhplus.be.server.domain.order.dto.OrderDto;
+import kr.hhplus.be.server.domain.order.dto.OrderProductDto;
+import kr.hhplus.be.server.domain.order.dto.OrderResult;
+import kr.hhplus.be.server.domain.order.dto.OrderSearchResult;
+import kr.hhplus.be.server.domain.order.dto.OrderTopSearchResult;
+import kr.hhplus.be.server.domain.order.exception.OrderNotFoundException;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class OrderService {
 
+    private final EntityManager em;
     private final OrderRepository orderRepository;
     private final OrderProductRepository orderProductRepository;
 
@@ -57,6 +64,7 @@ public class OrderService {
         );
     }
 
+    @Transactional
     public void updateOrderStatusPayed(Long id) {
         Order order = orderRepository.findById(id).orElseThrow(OrderNotFoundException::new);
 
@@ -72,6 +80,16 @@ public class OrderService {
 
     public OrderSearchResult getOrderById(Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new OrderNotFoundException());
+
+        return OrderSearchResult.fromEntity(order);
+    }
+
+    @Transactional
+    public OrderSearchResult getOrderByIdWithLockAndUpdateStatus(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+            .orElseThrow(OrderNotFoundException::new);
+        
+        order.updatePayed();
 
         return OrderSearchResult.fromEntity(order);
     }
