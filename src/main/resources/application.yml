@@ -1,6 +1,7 @@
 spring:
   application:
     name: hhplus
+    version: 1
   profiles:
     active: local
   datasource:
@@ -29,7 +30,21 @@ springdoc:
     display-request-duration: true      # Tryout 시 요청에 걸린 시간 출력
     operations-sorter: method           # Http Method 기준으로 정렬
 ---
-spring.config.activate.on-profile: local, test
+spring.config.activate.on-profile: local
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true  # SQL 포맷팅
+
+---
+spring.config.activate.on-profile: test
 
 spring:
   jpa:
