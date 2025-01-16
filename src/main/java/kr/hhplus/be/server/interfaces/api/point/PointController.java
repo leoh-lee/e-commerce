@@ -25,7 +25,7 @@ public class PointController implements PointApi {
 
     @Override
     @GetMapping("/{userId}")
-    public ApiResponse<PointSearchResponse> searchPoint(@PathVariable Long userId) {
+    public ApiResponse<PointSearchResponse> searchPoint(@PathVariable("userId") Long userId) {
         return ApiResponse.ok(pointFacade.searchPoint(userId), ResponseCode.SUCCESS_SEARCH_USER_POINT);
     }
 
