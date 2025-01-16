@@ -29,13 +29,13 @@ public class OrderController implements OrderApi {
 
     @Override
     @GetMapping
-    public ApiResponse<PageResponse<OrderSearchResponse>> searchOrders(@RequestParam Long userId, Pageable pageable) {
+    public ApiResponse<PageResponse<OrderSearchResponse>> searchOrders(@RequestParam("userId") Long userId, Pageable pageable) {
         return ApiResponse.ok(new PageResponse<>(orderFacade.getOrdersByUserId(userId, pageable)), ResponseCode.SUCCESS_SEARCH_ORDERS);
     }
 
     @Override
     @GetMapping("/top")
-    public ApiResponse<List<OrderTopSearchResponse>> searchProductsTop5(@RequestParam Integer topCount) {
+    public ApiResponse<List<OrderTopSearchResponse>> searchProductsTop5(@RequestParam("topCount") Integer topCount) {
         return ApiResponse.ok(orderFacade.searchTopOrder(topCount), ResponseCode.SUCCESS_SEARCH_TOP_ORDERS);
     }
 }
