@@ -33,6 +33,12 @@ public enum ResponseCode {
     // 4XXX: 클라이언트 에러
         , EXPIRED_COUPON("4200", "만료된 쿠폰입니다.")
         , INVALID_COUPON("4201", "유효하지 않은 쿠폰입니다.")
+        , USER_NOT_FOUND("4000", "사용자를 찾을 수 없습니다.")
+        , COUPON_NOT_FOUND("4001", "쿠폰을 찾을 수 없습니다.")
+        , POINT_NOT_FOUND("4002", "포인트를 찾을 수 없습니다.")
+        , ORDER_NOT_FOUND("4003", "주문을 찾을 수 없습니다.")
+        , PAYMENT_NOT_FOUND("4004", "결제를 찾을 수 없습니다.")
+        , PRODUCT_NOT_FOUND("4005", "상품을 찾을 수 없습니다.")
 
     // 5XXX: 서버 에러
     // 최대 포인트 이상 포인트를 충전할 수 없다는 메시지
@@ -46,7 +52,7 @@ public enum ResponseCode {
         , ORDER_SEARCH_FAILED("5300", "주문 목록 조회에 실패했습니다.")
 
         , INSUFFICIENT_BALANCE("5400", "결제 잔액이 부족합니다.")
-        , USER_NOT_FOUND("5500", "사용자를 찾을 수 없습니다.")
+
     ;
 
     private final String code;
