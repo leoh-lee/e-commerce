@@ -1,6 +1,5 @@
 package kr.hhplus.be.server.interfaces.api.product.response;
 
-import kr.hhplus.be.server.domain.product.ProductStock;
 import kr.hhplus.be.server.domain.product.dto.ProductSearchResult;
 
 import java.math.BigDecimal;
@@ -13,8 +12,6 @@ public record ProductSearchResponse(
 ) {
 
     public static ProductSearchResponse from(ProductSearchResult searchResult) {
-        ProductStock stock = searchResult.stock();
-
-        return new ProductSearchResponse(searchResult.id(), searchResult.productName(), searchResult.productPrice(), stock.getStock());
+        return new ProductSearchResponse(searchResult.id(), searchResult.productName(), searchResult.productPrice(), searchResult.stock());
     }
 }
