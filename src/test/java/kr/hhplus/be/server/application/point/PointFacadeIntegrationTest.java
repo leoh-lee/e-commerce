@@ -124,12 +124,14 @@ class PointFacadeIntegrationTest extends IntegrationTest {
 
             PointChargeRequest pointChargeRequest = new PointChargeRequest(user.getId(), BigDecimal.valueOf(10_000));
 
+            TestDataPlatform testDataPlatform = (TestDataPlatform) dataPlatform;
+            Integer platformSentCount = testDataPlatform.getSentCount();
+
             // when
             pointFacade.chargePoint(pointChargeRequest);
 
             // then
-            TestDataPlatform testDataPlatform = (TestDataPlatform) dataPlatform;
-            assertThat(testDataPlatform.getSentCount()).isEqualTo(1);
+            assertThat(testDataPlatform.getSentCount()).isEqualTo(platformSentCount + 1);
         }
     }
 

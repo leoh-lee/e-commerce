@@ -172,4 +172,11 @@ gradle-app.setting
 # data
 data/
 
+# querydsl
+src/main/generated/
+bin/generated-sources/
+
+# vscode
+launch.json
+
 # End of https://www.toptal.com/developers/gitignore/api/java,intellij,gradle

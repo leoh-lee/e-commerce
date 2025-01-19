@@ -4,20 +4,23 @@ import kr.hhplus.be.server.domain.order.OrderService;
 import kr.hhplus.be.server.domain.order.dto.OrderSearchResult;
 import kr.hhplus.be.server.domain.payment.PaymentService;
 import kr.hhplus.be.server.domain.payment.dto.PaymentResult;
+import kr.hhplus.be.server.domain.payment.dto.PaymentSearchResult;
 import kr.hhplus.be.server.domain.point.PointService;
-import kr.hhplus.be.server.domain.user.UserSearchResult;
 import kr.hhplus.be.server.domain.user.UserService;
+import kr.hhplus.be.server.domain.user.exception.UserNotFoundException;
 import kr.hhplus.be.server.infrastructures.external.dataplatform.DataPlatform;
 import kr.hhplus.be.server.infrastructures.external.dataplatform.DataPlatformSendRequest;
 import kr.hhplus.be.server.infrastructures.external.dataplatform.RequestType;
 import kr.hhplus.be.server.interfaces.api.payment.request.PaymentRequest;
 import kr.hhplus.be.server.interfaces.api.payment.response.PaymentResponse;
+import kr.hhplus.be.server.interfaces.api.payment.response.PaymentSearchResponse;
 import kr.hhplus.be.server.support.util.DateTimeProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -33,13 +36,20 @@ public class PaymentFacade {
 
     @Transactional
     public PaymentResponse payment(PaymentRequest paymentRequest) {
+
+        Long userId = paymentRequest.userId();
+
+        if (!userService.existsById(userId)) {
+            throw new UserNotFoundException();
+        }
+
         Long orderId = paymentRequest.orderId();
 
         OrderSearchResult order = orderService.getOrderById(orderId);
-        Long userId = order.userId();
+
         BigDecimal finalPrice = order.finalPrice();
 
-        UserSearchResult userById = userService.getUserById(userId);
+        orderService.updateOrderStatusPayed(order.id());
 
         PaymentResult paymentResult = paymentService.save(orderId, finalPrice);
         pointService.usePoint(userId, finalPrice);
@@ -47,6 +57,15 @@ public class PaymentFacade {
         dataPlatform.send(new DataPlatformSendRequest<>(userId, RequestType.PAYMENT, dateTimeProvider.getLocalDateTimeNow(), paymentRequest));
 
         return PaymentResponse.from(paymentResult);
+    }
+
+    @Transactional
+    public List<PaymentSearchResponse> searchPaymentsByUserId(Long userId) {
+        List<PaymentSearchResult> payments = paymentService.getPaymentsByUserId(userId);
+
+        return payments.stream()
+                .map(PaymentSearchResponse::from)
+                .toList();
     }
 
 }

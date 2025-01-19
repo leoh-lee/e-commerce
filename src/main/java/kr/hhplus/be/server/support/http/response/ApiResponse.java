@@ -25,4 +25,8 @@ public class ApiResponse<T> {
         return new ApiResponse<>(responseCode.getCode(), responseCode.getMessage(), result);
     }
 
+    public static <T> ApiResponse<T> failure(ResponseCode responseCode) {
+        return new ApiResponse<>(responseCode.getCode(), responseCode.getMessage(), null);
+    }
+
 }

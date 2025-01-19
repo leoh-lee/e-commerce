@@ -32,7 +32,8 @@ public class OrderService {
         Order order = new Order(
                 orderDto.userId(),
                 orderDto.userCouponId(),
-                orderPrice
+                orderPrice,
+                OrderStatus.ORDERED
         );
 
         orderRepository.save(order);
@@ -54,6 +55,12 @@ public class OrderService {
                 orderPrice.getDiscountAmount(),
                 orderPrice.getFinalPrice()
         );
+    }
+
+    public void updateOrderStatusPayed(Long id) {
+        Order order = orderRepository.findById(id).orElseThrow(OrderNotFoundException::new);
+
+        order.updatePayed();
     }
 
     public List<OrderTopSearchResult> getTopOrders(int topCount) {

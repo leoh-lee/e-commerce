@@ -2,8 +2,10 @@ package kr.hhplus.be.server.domain.order.dto;
 
 import kr.hhplus.be.server.domain.order.Order;
 import kr.hhplus.be.server.domain.order.OrderPrice;
+import kr.hhplus.be.server.domain.order.OrderStatus;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 public record OrderSearchResult(
         Long id,
@@ -11,7 +13,9 @@ public record OrderSearchResult(
         Long userCouponId,
         BigDecimal basePrice,
         BigDecimal discountAmount,
-        BigDecimal finalPrice
+        BigDecimal finalPrice,
+        OrderStatus orderStatus,
+        LocalDateTime orderDate
 ) {
 
     public static OrderSearchResult fromEntity(Order order) {
@@ -23,7 +27,9 @@ public record OrderSearchResult(
                 order.getUserCouponId(),
                 orderPrice.getBasePrice(),
                 orderPrice.getDiscountAmount(),
-                orderPrice.getFinalPrice()
+                orderPrice.getFinalPrice(),
+                order.getOrderStatus(),
+                order.getCreatedAt()
         );
     }
 

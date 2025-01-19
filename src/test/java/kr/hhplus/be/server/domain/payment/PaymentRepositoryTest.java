@@ -1,6 +1,7 @@
 package kr.hhplus.be.server.domain.payment;
 
 import jakarta.persistence.EntityManager;
+import kr.hhplus.be.server.domain.order.OrderStatus;
 import kr.hhplus.be.server.support.RepositoryTest;
 import kr.hhplus.be.server.domain.order.Order;
 import kr.hhplus.be.server.domain.order.OrderPrice;
@@ -29,8 +30,8 @@ class PaymentRepositoryTest extends RepositoryTest {
 
         OrderPrice orderPrice = new OrderPrice(BigDecimal.valueOf(20_000), BigDecimal.valueOf(10_000), BigDecimal.valueOf(10_000));
 
-        Order order1 = new Order(1L, 1L, orderPrice);
-        Order order2 = new Order(1L, 2L, orderPrice);
+        Order order1 = new Order(1L, 1L, orderPrice, OrderStatus.ORDERED);
+        Order order2 = new Order(1L, 2L, orderPrice, OrderStatus.PAYED);
 
         em.persist(order1);
         em.persist(order2);
