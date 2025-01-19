@@ -9,5 +9,7 @@ public interface CouponRepository {
 
     Optional<Coupon> findById(Long couponId);
 
+    Optional<Coupon> findByIdWithLock(Long couponId);
+
     void save(Coupon coupon);
 }

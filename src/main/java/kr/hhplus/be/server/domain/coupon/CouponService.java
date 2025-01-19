@@ -1,12 +1,10 @@
 package kr.hhplus.be.server.domain.coupon;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.OptimisticLockException;
 import kr.hhplus.be.server.domain.coupon.dto.*;
 import kr.hhplus.be.server.domain.coupon.enums.UserCouponStatus;
 import kr.hhplus.be.server.domain.coupon.exception.CouponNotFoundException;
 import kr.hhplus.be.server.domain.coupon.exception.CouponNotUsableException;
-import kr.hhplus.be.server.support.exception.OptimisticLockConflictException;
 import kr.hhplus.be.server.support.util.DateTimeProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -59,34 +57,60 @@ public class CouponService {
 
     @Transactional
     public CouponIssueResult issueCoupon(Long userId, Long couponId) {
-        for (int attempt = 0; attempt < 3; attempt++) {
-            try {
-                Coupon coupon = couponRepository.findById(couponId).orElseThrow(CouponNotFoundException::new);
+        Coupon coupon = couponRepository.findByIdWithLock(couponId).orElseThrow(CouponNotFoundException::new);
 
-                if (!coupon.isUsable(dateTimeProvider.getLocalDateTimeNow())) {
-                    throw new CouponNotUsableException();
-                }
-
-                coupon.decreaseStock();
-                couponRepository.save(coupon);
-
-                UserCoupon userCoupon = new UserCoupon(userId, couponId, UserCouponStatus.ISSUED, dateTimeProvider.getLocalDateTimeNow(), null);
-                userCouponRepository.save(userCoupon);
-
-                return new CouponIssueResult(
-                        couponId,
-                        userId,
-                        coupon.getCouponInfo().getCouponName(),
-                        coupon.getCouponInfo().getCouponType(),
-                        coupon.getDiscountInfo().getDiscountAmount(),
-                        coupon.getDiscountInfo().getDiscountRate()
-                );
-            } catch (OptimisticLockException e) {
-                em.clear();
-            }
+        if (!coupon.isUsable(dateTimeProvider.getLocalDateTimeNow())) {
+            throw new CouponNotUsableException();
         }
-        throw new OptimisticLockConflictException();
+
+        coupon.decreaseStock();
+        couponRepository.save(coupon);
+
+        UserCoupon userCoupon = new UserCoupon(userId, couponId, UserCouponStatus.ISSUED, dateTimeProvider.getLocalDateTimeNow(), null);
+        userCouponRepository.save(userCoupon);
+
+        return new CouponIssueResult(
+                couponId,
+                userId,
+                coupon.getCouponInfo().getCouponName(),
+                coupon.getCouponInfo().getCouponType(),
+                coupon.getDiscountInfo().getDiscountAmount(),
+                coupon.getDiscountInfo().getDiscountRate()
+        );
     }
+//
+//    @Transactional
+//    public CouponIssueResult issueCoupon(Long userId, Long couponId) {
+//
+//
+//        for (int attempt = 0; attempt < 3; attempt++) {
+//            try {
+//                Coupon coupon = couponRepository.findById(couponId).orElseThrow(CouponNotFoundException::new);
+//
+//                if (!coupon.isUsable(dateTimeProvider.getLocalDateTimeNow())) {
+//                    throw new CouponNotUsableException();
+//                }
+//
+//                coupon.decreaseStock();
+//                couponRepository.save(coupon);
+//
+//                UserCoupon userCoupon = new UserCoupon(userId, couponId, UserCouponStatus.ISSUED, dateTimeProvider.getLocalDateTimeNow(), null);
+//                userCouponRepository.save(userCoupon);
+//
+//                return new CouponIssueResult(
+//                        couponId,
+//                        userId,
+//                        coupon.getCouponInfo().getCouponName(),
+//                        coupon.getCouponInfo().getCouponType(),
+//                        coupon.getDiscountInfo().getDiscountAmount(),
+//                        coupon.getDiscountInfo().getDiscountRate()
+//                );
+//            } catch (OptimisticLockException e) {
+//                em.clear();
+//            }
+//        }
+//        throw new OptimisticLockConflictException();
+//    }
 
     @Transactional
     public CouponUseResult useCoupon(Long userCouponId, BigDecimal price) {
