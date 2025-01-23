@@ -25,3 +25,6 @@ API 명세서는 [여기](docs/apiSpec.md)에서 확인할 수 있습니다.
 ![swagger ui](docs/assets/images/swagger_ui.png)
 
 자세한 명세는 [Swagger Hub](https://app.swaggerhub.com/apis/SPAKERS38/e-commerce/1.0.0)에서 확인하실 수 있습니다.
+
+### 5. 동시성 제어 보고서
+[링크](docs/concurrency.md)
