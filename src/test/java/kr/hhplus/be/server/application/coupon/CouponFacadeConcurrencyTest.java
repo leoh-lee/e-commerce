@@ -7,17 +7,25 @@ import kr.hhplus.be.server.domain.user.User;
 import kr.hhplus.be.server.domain.user.UserRepository;
 import kr.hhplus.be.server.interfaces.api.coupon.request.CouponIssueRequest;
 import kr.hhplus.be.server.interfaces.api.coupon.response.CouponIssueResponse;
+import kr.hhplus.be.server.support.TestDataBuilder;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.*;
 
 import static org.assertj.core.api.Assertions.*;
 
+@Slf4j
 public class CouponFacadeConcurrencyTest extends IntegrationTest {
+
+    private static final int COUPON_STOCK = 5;
 
     @Autowired
     private CouponFacade couponFacade;
@@ -31,12 +39,15 @@ public class CouponFacadeConcurrencyTest extends IntegrationTest {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private TestDataBuilder testDataBuilder;
+
     private Long couponId;
     private Long userId;
 
     @BeforeEach
     void setUp() {
-        CouponInfo couponInfo = new CouponInfo("10% 할인 쿠폰", CouponType.FIXED, 5);
+        CouponInfo couponInfo = new CouponInfo("10% 할인 쿠폰", CouponType.FIXED, COUPON_STOCK);
         DiscountInfo discountInfo = new DiscountInfo(null, 10);
         LocalDateTime now = LocalDateTime.now();
         CouponUsableDate couponUsableDate = new CouponUsableDate(now.minusDays(1), now.plusDays(1));
@@ -82,6 +93,44 @@ public class CouponFacadeConcurrencyTest extends IntegrationTest {
         assertThat(coupon.getCouponInfo().getCouponStock()).isEqualTo(4);
         long issuedCoupons = userCouponRepository.findByUserId(userId).size();
         assertThat(issuedCoupons).isEqualTo(1);
+    }
+
+    @RepeatedTest(10)
+    @DisplayName("여러 명의 사용자가 동시에 쿠폰을 발급받는 경우, 쿠폰의 재고만큼만 발급된다.")
+    void issueCoupon_concurrentRequests_shouldIssuedInStock() throws InterruptedException {
+        // given
+        int numberOfThreads = 100;
+
+        ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);
+        CountDownLatch latch = new CountDownLatch(numberOfThreads);
+
+        for (int i = 0; i < numberOfThreads; i++) {
+            testDataBuilder.createUser("user" + i);
+        }
+
+        List<CouponIssueResponse> couponIssueResponses = new ArrayList<>();
+
+        // when
+        for (int i = 0; i < numberOfThreads; i++) {
+            int finalI = i;
+            executorService.submit(() -> {
+                CouponIssueRequest couponIssueRequest = new CouponIssueRequest((long) (finalI + 1), couponId);
+                try {
+                    couponIssueResponses.add(couponFacade.issueCoupon(couponIssueRequest));
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+
+        latch.await();
+        executorService.shutdown();
+        if (!executorService.awaitTermination(10, TimeUnit.SECONDS)) {
+            executorService.shutdownNow();
+        }
+
+        // then
+        assertThat(couponIssueResponses).hasSize(COUPON_STOCK);
     }
 
 }
