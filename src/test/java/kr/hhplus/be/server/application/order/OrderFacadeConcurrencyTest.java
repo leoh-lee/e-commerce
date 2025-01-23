@@ -94,7 +94,7 @@ class OrderFacadeConcurrencyTest extends IntegrationTest {
         // then
         ProductSearchResult updatedProduct = productService.searchProduct(product.getId());
 
-        assertThat(updatedProduct.stock().getStock())
+        assertThat(updatedProduct.stock())
                 .isEqualTo(10 - (successOrders.size() * 2));
 
         assertThat(successOrders.size()).isLessThanOrEqualTo(5);
