@@ -54,7 +54,7 @@ class PointFacadeConcurrencyTest extends IntegrationTest {
         for (int i = 0; i < numberOfThreads; i++) {
             executorService.submit(() -> {
                 try {
-                    barrier.await(); // 동시 시작
+                    barrier.await();
                     PointChargeRequest request = new PointChargeRequest(userId, chargeAmount);
                     pointFacade.chargePoint(request);
                 } catch (Exception e) {
