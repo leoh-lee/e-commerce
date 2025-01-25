@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import jakarta.persistence.OptimisticLockException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -63,7 +64,16 @@ public class ProductService {
 
         products.forEach((product)-> {
             Integer quantity = productQuantityMap.get(product.getId());
-            product.decreaseStock(quantity);
+
+            int retryCount = 0;
+            while(retryCount < 3) {
+                try {
+                    product.decreaseStock(quantity);
+                    break;
+                } catch (OptimisticLockException e) {
+                    retryCount++;
+                }
+            }
         });
     }
 }
