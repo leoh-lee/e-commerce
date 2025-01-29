@@ -30,7 +30,6 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-@Transactional
 public class OrderFacade {
 
     private final UserService userService;
@@ -40,6 +39,7 @@ public class OrderFacade {
     private final DataPlatform dataPlatform;
     private final DateTimeProvider dateTimeProvider;
 
+    @Transactional
     public OrderResponse order(OrderRequest orderRequest) {
         Long userId = orderRequest.userId();
         
@@ -92,11 +92,13 @@ public class OrderFacade {
         return OrderResponse.from(orderResult);
     }
 
+    @Transactional(readOnly = true)
     public Page<OrderSearchResponse> getOrdersByUserId(Long userId, Pageable pageable) {
         return orderService.getOrdersByUserId(userId, pageable)
                 .map(OrderSearchResponse::from);
     }
 
+    @Transactional(readOnly = true)
     public List<OrderTopSearchResponse> searchTopOrder(int topCount) {
         return orderService.getTopOrders(topCount)
                 .stream()

@@ -20,7 +20,6 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-@Transactional
 public class CouponFacade {
 
     private final UserService userService;
@@ -28,6 +27,7 @@ public class CouponFacade {
     private final DataPlatform dataPlatform;
     private final DateTimeProvider dateTimeProvider;
 
+    @Transactional
     public CouponIssueResponse issueCoupon(CouponIssueRequest couponIssueRequest) {
         Long userId = couponIssueRequest.userId();
 

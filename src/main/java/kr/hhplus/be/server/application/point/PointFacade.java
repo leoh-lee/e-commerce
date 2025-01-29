@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
-@Transactional
 public class PointFacade {
 
     private final PointService pointService;
@@ -26,6 +25,7 @@ public class PointFacade {
     private final DataPlatform dataPlatform;
     private final DateTimeProvider dateTimeProvider;
 
+    @Transactional
     public PointChargeResponse chargePoint(PointChargeRequest pointChargeRequest) {
         Long userId = pointChargeRequest.userId();
 
