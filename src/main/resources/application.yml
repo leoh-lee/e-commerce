@@ -8,7 +8,7 @@ spring:
     name: HangHaePlusDataSource
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
-      maximum-pool-size: 3
+      maximum-pool-size: 10
       connection-timeout: 10000
       max-lifetime: 60000
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -54,3 +54,7 @@ spring:
     properties:
       hibernate:
         format_sql: true  # SQL 포맷팅
+  data:
+    redis:
+      port: 6379
+      host: localhost
