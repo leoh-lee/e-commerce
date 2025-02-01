@@ -111,7 +111,7 @@ class ProductRepositoryTest extends RepositoryTest {
         em.flush();
 
         // when
-        Product findProduct = productRepository.findById(product.getId()).get();
+        Product findProduct = productRepository.findById(product.getId());
 
         // then
         assertThat(findProduct.getProductName()).isEqualTo(productName);

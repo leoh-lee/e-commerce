@@ -7,6 +7,7 @@ import kr.hhplus.be.server.domain.product.Product;
 import kr.hhplus.be.server.domain.product.ProductRepository;
 import kr.hhplus.be.server.domain.product.dto.ProductSearchDto;
 import kr.hhplus.be.server.domain.product.QProduct;
+import kr.hhplus.be.server.domain.product.exception.ProductNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -50,8 +51,8 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
-    public Optional<Product> findById(Long productId) {
-        return productJpaRepository.findById(productId);
+    public Product findById(Long productId) {
+        return productJpaRepository.findById(productId).orElseThrow(ProductNotFoundException::new);
     }
 
     public void save(Product product) {

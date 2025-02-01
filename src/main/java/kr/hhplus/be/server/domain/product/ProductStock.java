@@ -7,7 +7,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.Version;
 import kr.hhplus.be.server.domain.product.exception.StockNotEnoughException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -32,9 +31,6 @@ public class ProductStock {
 
     @Column(nullable = false)
     private int stock;
-
-    @Version
-    private Long version;
 
     public ProductStock(Product product, int stock) {
         this.product = product;

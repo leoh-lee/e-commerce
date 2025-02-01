@@ -11,7 +11,7 @@ public interface ProductRepository {
 
     Page<Product> findAll(ProductSearchDto searchDto, Pageable pageable);
 
-    Optional<Product> findById(Long productId);
+    Product findById(Long productId);
 
     void save(Product product);
 

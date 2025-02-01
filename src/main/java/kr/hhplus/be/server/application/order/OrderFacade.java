@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.application.order;
 
+import kr.hhplus.be.server.config.annotation.DistributedLock;
 import kr.hhplus.be.server.domain.coupon.CouponService;
 import kr.hhplus.be.server.domain.coupon.dto.CouponUseResult;
 import kr.hhplus.be.server.domain.order.OrderService;
@@ -22,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
@@ -58,8 +60,8 @@ public class OrderFacade {
         BigDecimal totalPrice = productService.getTotalPriceBy(orderProductsDtos);
 
         // 3. 상품 재고 차감
-        productService.decreaseProductStock(orderProductsDtos);
-        
+        orderProductsDtos.forEach(productService::decreaseProductStock);
+
         // 4. 쿠폰 있으면 쿠폰 정보 조회
         OrderDto.OrderDtoBuilder orderDtoBuilder = OrderDto.builder()
                 .userId(userId)
@@ -104,7 +106,6 @@ public class OrderFacade {
                 .stream()
                 .map(OrderTopSearchResponse::from)
                 .toList();
-
     }
 
 }
