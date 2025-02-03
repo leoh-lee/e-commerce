@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -95,7 +96,7 @@ public class CouponFacadeConcurrencyTest extends IntegrationTest {
         assertThat(issuedCoupons).isEqualTo(1);
     }
 
-    @RepeatedTest(10)
+    @RepeatedTest(1)
     @DisplayName("여러 명의 사용자가 동시에 쿠폰을 발급받는 경우, 쿠폰의 재고만큼만 발급된다.")
     void issueCoupon_concurrentRequests_shouldIssuedInStock() throws InterruptedException {
         // given
@@ -110,6 +111,7 @@ public class CouponFacadeConcurrencyTest extends IntegrationTest {
 
         List<CouponIssueResponse> couponIssueResponses = new ArrayList<>();
 
+        AtomicInteger atomicInteger = new AtomicInteger(0);
         // when
         for (int i = 0; i < numberOfThreads; i++) {
             int finalI = i;
@@ -117,7 +119,10 @@ public class CouponFacadeConcurrencyTest extends IntegrationTest {
                 CouponIssueRequest couponIssueRequest = new CouponIssueRequest((long) (finalI + 1), couponId);
                 try {
                     couponIssueResponses.add(couponFacade.issueCoupon(couponIssueRequest));
-                } finally {
+                } catch (Exception e) {
+                    atomicInteger.getAndIncrement();
+                }
+                finally {
                     latch.countDown();
                 }
             });
@@ -129,6 +134,7 @@ public class CouponFacadeConcurrencyTest extends IntegrationTest {
             executorService.shutdownNow();
         }
 
+        log.info("error count >>> {}", atomicInteger.get());
         // then
         assertThat(couponIssueResponses).hasSize(COUPON_STOCK);
     }

@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.application.coupon;
 
+import kr.hhplus.be.server.config.annotation.DistributedLock;
 import kr.hhplus.be.server.domain.coupon.CouponService;
 import kr.hhplus.be.server.domain.coupon.dto.CouponIssueResult;
 import kr.hhplus.be.server.domain.user.UserService;
@@ -13,14 +14,15 @@ import kr.hhplus.be.server.interfaces.api.coupon.response.CouponIssueResponse;
 import kr.hhplus.be.server.interfaces.api.coupon.response.UserCouponSearchResponse;
 import kr.hhplus.be.server.support.util.DateTimeProvider;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
-@Transactional
 public class CouponFacade {
 
     private final UserService userService;
@@ -28,14 +30,19 @@ public class CouponFacade {
     private final DataPlatform dataPlatform;
     private final DateTimeProvider dateTimeProvider;
 
+    @DistributedLock(key = "'issue_coupon_'.concat(#couponIssueRequest.couponId())")
+     @Transactional
     public CouponIssueResponse issueCoupon(CouponIssueRequest couponIssueRequest) {
         Long userId = couponIssueRequest.userId();
+        Long couponId = couponIssueRequest.couponId();
+
+        log.info("Issue Coupon >>> userId: {}, couponId : {}", userId, couponId);
 
         if (!userService.existsById(userId)) {
             throw new UserNotFoundException();
         }
 
-        CouponIssueResult couponIssueResult = couponService.issueCoupon(userId, couponIssueRequest.couponId());
+        CouponIssueResult couponIssueResult = couponService.issueCoupon(userId, couponId);
 
         dataPlatform.send(new DataPlatformSendRequest<>(userId, RequestType.COUPON_ISSUE, dateTimeProvider.getLocalDateTimeNow(), couponIssueResult));
 

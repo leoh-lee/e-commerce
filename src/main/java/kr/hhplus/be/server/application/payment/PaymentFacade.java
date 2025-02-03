@@ -24,7 +24,6 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class PaymentFacade {
 
     private final UserService userService;
@@ -59,7 +58,7 @@ public class PaymentFacade {
         return PaymentResponse.from(paymentResult);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<PaymentSearchResponse> searchPaymentsByUserId(Long userId) {
         List<PaymentSearchResult> payments = paymentService.getPaymentsByUserId(userId);
 

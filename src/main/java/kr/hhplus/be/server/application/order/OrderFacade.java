@@ -1,5 +1,6 @@
 package kr.hhplus.be.server.application.order;
 
+import kr.hhplus.be.server.config.annotation.DistributedLock;
 import kr.hhplus.be.server.domain.coupon.CouponService;
 import kr.hhplus.be.server.domain.coupon.dto.CouponUseResult;
 import kr.hhplus.be.server.domain.order.OrderService;
@@ -22,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
@@ -30,7 +32,6 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-@Transactional
 public class OrderFacade {
 
     private final UserService userService;
@@ -40,6 +41,7 @@ public class OrderFacade {
     private final DataPlatform dataPlatform;
     private final DateTimeProvider dateTimeProvider;
 
+    @Transactional
     public OrderResponse order(OrderRequest orderRequest) {
         Long userId = orderRequest.userId();
         
@@ -58,8 +60,8 @@ public class OrderFacade {
         BigDecimal totalPrice = productService.getTotalPriceBy(orderProductsDtos);
 
         // 3. 상품 재고 차감
-        productService.decreaseProductStock(orderProductsDtos);
-        
+        orderProductsDtos.forEach(productService::decreaseProductStock);
+
         // 4. 쿠폰 있으면 쿠폰 정보 조회
         OrderDto.OrderDtoBuilder orderDtoBuilder = OrderDto.builder()
                 .userId(userId)
@@ -92,17 +94,18 @@ public class OrderFacade {
         return OrderResponse.from(orderResult);
     }
 
+    @Transactional(readOnly = true)
     public Page<OrderSearchResponse> getOrdersByUserId(Long userId, Pageable pageable) {
         return orderService.getOrdersByUserId(userId, pageable)
                 .map(OrderSearchResponse::from);
     }
 
+    @Transactional(readOnly = true)
     public List<OrderTopSearchResponse> searchTopOrder(int topCount) {
         return orderService.getTopOrders(topCount)
                 .stream()
                 .map(OrderTopSearchResponse::from)
                 .toList();
-
     }
 
 }

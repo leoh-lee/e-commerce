@@ -1,7 +1,6 @@
 package kr.hhplus.be.server.domain.product.dto;
 
 import kr.hhplus.be.server.domain.product.Product;
-import kr.hhplus.be.server.domain.product.ProductStock;
 
 import java.math.BigDecimal;
 

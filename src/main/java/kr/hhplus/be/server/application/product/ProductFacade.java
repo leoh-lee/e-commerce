@@ -11,12 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class ProductFacade {
 
     private final ProductService productService;
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Page<ProductSearchResponse> getProducts(ProductSearchRequest searchRequest, Pageable pageable) {
         return productService.searchProducts(searchRequest.toSearchDto(), pageable)
                 .map(ProductSearchResponse::from);
