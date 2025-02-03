@@ -35,10 +35,9 @@ public class DistributedLockAspect {
 
         String key = REDISSON_LOCK_PREFIX + CustomSpringELParser.getDynamicValue(signature.getParameterNames(), joinPoint.getArgs(), distributedLock.key());
 
-        log.info("{}#{} | Try to get DistributedLock. Key >>> {}", method.getDeclaringClass().getSimpleName(), method.getName(), key);
-
         RLock rLock = redissonClient.getLock(key);
         try {
+            log.info("{}#{} | Try to get DistributedLock. Key >>> {}", method.getDeclaringClass().getSimpleName(), method.getName(), key);
             boolean available = rLock.tryLock(distributedLock.waitTime(), distributedLock.leaseTime(), distributedLock.timeUnit());
             if (!available) {
                 log.info("{}#{} | Fail to get DistributedLock. Key >>> {}", method.getDeclaringClass().getSimpleName(), method.getName(), key);
@@ -46,7 +45,6 @@ public class DistributedLockAspect {
             }
 
             log.info("{}#{} | Success to get DistributedLock. Key >>> {}", method.getDeclaringClass().getSimpleName(), method.getName(), key);
-
             return joinPoint.proceed();
         } catch (InterruptedException e) {
             throw new InterruptedException();
@@ -55,7 +53,7 @@ public class DistributedLockAspect {
                 rLock.unlock();
                 log.info("DistributedLock is unlocked. Key is {}", key);
             } catch (IllegalMonitorStateException e) {
-                log.info("Redisson Lock Already UnLock serviceName: {} key: {}", method.getName(), key);
+                log.info("Redisson Lock Already UnLock serviceName: {} key: {}", method.getDeclaringClass().getSimpleName(), key);
             }
         }
     }
