@@ -19,12 +19,12 @@ import jakarta.persistence.Table;
 public class DynamicEntityCleanupListener extends AbstractTestExecutionListener {
 
     @Override
-    public void beforeTestMethod(TestContext testContext) {
+    public void afterTestMethod(TestContext testContext) throws Exception {
         EntityManager em = testContext.getApplicationContext().getBean(EntityManager.class);
         PlatformTransactionManager transactionManager = testContext.getApplicationContext().getBean(PlatformTransactionManager.class);
-        
+
         TransactionStatus status = transactionManager.getTransaction(new DefaultTransactionDefinition());
-        
+
         try {
             em.flush();
 
@@ -48,7 +48,7 @@ public class DynamicEntityCleanupListener extends AbstractTestExecutionListener 
 
             // MySQL용 foreign key check 활성화
             em.createNativeQuery("SET FOREIGN_KEY_CHECKS = 1").executeUpdate();
-            
+
             transactionManager.commit(status);
         } catch (TransactionException e) {
             transactionManager.rollback(status);
