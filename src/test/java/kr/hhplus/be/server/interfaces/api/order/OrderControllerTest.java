@@ -144,7 +144,7 @@ class OrderControllerTest {
                 new OrderTopSearchResponse(2L, 3, 2),
                 new OrderTopSearchResponse(3L, 1, 3)
         );
-        when(orderFacade.searchTopOrder(anyInt())).thenReturn(responses);
+        when(orderFacade.searchTopOrder()).thenReturn(responses);
 
         // when // then
         mockMvc.perform(MockMvcRequestBuilders.get(BASE_URL + "/top")
