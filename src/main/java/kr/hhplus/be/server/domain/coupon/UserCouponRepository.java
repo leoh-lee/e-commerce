@@ -14,4 +14,6 @@ public interface UserCouponRepository {
     UserCouponDto findByIdWithCoupon(Long userCouponId);
 
     void save(UserCoupon userCoupon);
+
+    void saveAll(List<UserCoupon> userCoupons);
 }
