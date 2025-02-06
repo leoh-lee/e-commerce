@@ -9,4 +9,6 @@ public interface DateTimeProvider {
 
     LocalDateTime getLocalDateTimeNow();
 
+    Long getCurrentTimestamp();
+
 }
