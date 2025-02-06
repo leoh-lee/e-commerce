@@ -46,8 +46,10 @@ public class CouponIssueProcessor extends RedisScanTemplate {
         // 발급 가능한 쿠폰 개수 계산 (전체 쿠폰 개수 - 발급된 쿠폰 수)
         long issuableCount = couponStock - (ObjectUtils.isEmpty(issuedCount) ? 0 : issuedCount);
 
-        // 발급 요청이 없는 경우 continue
+        // 쿠폰이 소진된 경우
         if (issuableCount < 1) {
+            redisTemplate.delete(key);
+            redisTemplate.delete(ISSUED_COUPON_KEY_PREFIX + couponId);
             return;
         }
 
