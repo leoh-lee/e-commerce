@@ -10,9 +10,9 @@ public record OrderTopSearchResponse(
 
     public static OrderTopSearchResponse from(OrderTopSearchResult orderTopSearchResult) {
         return new OrderTopSearchResponse(
-                orderTopSearchResult.productId(),
-                orderTopSearchResult.orderCount(),
-                orderTopSearchResult.rank()
+                orderTopSearchResult.getProductId(),
+                orderTopSearchResult.getOrderCount(),
+                orderTopSearchResult.getRank()
         );
     }
 }
