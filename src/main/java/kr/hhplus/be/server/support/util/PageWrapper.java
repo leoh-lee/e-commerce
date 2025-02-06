@@ -1,6 +1,8 @@
 package kr.hhplus.be.server.support.util;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -9,14 +11,16 @@ import java.io.Serializable;
 import java.util.List;
 
 @Getter
+@Setter
+@NoArgsConstructor
 public class PageWrapper<T> implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private final List<T> content;
-    private final int totalPages;
-    private final long totalElements;
-    private final int pageNumber;
-    private final int pageSize;
+    private List<T> content;
+    private int totalPages;
+    private long totalElements;
+    private int pageNumber;
+    private int pageSize;
 
     public PageWrapper(Page<T> page) {
         this.content = page.getContent();
@@ -30,3 +34,4 @@ public class PageWrapper<T> implements Serializable {
         return new PageImpl<>(content, PageRequest.of(pageNumber, pageSize), totalElements);
     }
 }
+

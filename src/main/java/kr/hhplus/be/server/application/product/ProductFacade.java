@@ -53,6 +53,10 @@ public class ProductFacade {
 
         log.info("getProducts Redis Key >>> {}", key);
         PageWrapper<ProductSearchResponse> cachedPage = (PageWrapper<ProductSearchResponse>) redisTemplate.opsForValue().get(key);
+        if (cachedPage == null) {
+            return null;
+        }
+
         return cachedPage.toPage(pageable.getPageNumber(), pageable.getPageSize());
     }
 

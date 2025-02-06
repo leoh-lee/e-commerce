@@ -7,6 +7,7 @@ import kr.hhplus.be.server.domain.product.ProductRepository;
 import kr.hhplus.be.server.domain.product.ProductStock;
 import kr.hhplus.be.server.domain.product.ProductStockRepository;
 import kr.hhplus.be.server.interfaces.api.product.response.ProductSearchResponse;
+import kr.hhplus.be.server.support.TestDataBuilder;
 import kr.hhplus.be.server.support.util.PageWrapper;
 import org.assertj.core.groups.Tuple;
 import org.junit.jupiter.api.DisplayName;
@@ -35,6 +36,9 @@ class ProductFacadeIntegrationTest extends IntegrationTest {
 
     @Autowired
     private ProductStockRepository productStockRepository;
+
+    @Autowired
+    private TestDataBuilder testDataBuilder;
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
@@ -67,6 +71,44 @@ class ProductFacadeIntegrationTest extends IntegrationTest {
                         Tuple.tuple("상품명8", 8_000),
                         Tuple.tuple("상품명9", 9_000),
                         Tuple.tuple("상품명10",10_000)
+                );
+    }
+
+    @Test
+    @DisplayName("Redis에 캐시된 상품 목록이 없는 경우 DB를 직접 조회하고 캐싱한다.")
+    void getProducts_whenCachedNotExists_thenConnectDB() {
+        // given
+        for (int i = 1; i <= 3; i++) {
+            testDataBuilder.createProduct("상품" + i, i * 10_000, i * 10);
+        }
+
+        Pageable pageable = PageRequest.of(0, 10);
+
+        ProductSearchRequest searchRequest = new ProductSearchRequest(null, null, null);
+
+        // when
+        Page<ProductSearchResponse> products = productFacade.getProducts(searchRequest, pageable);
+
+        // then
+        assertThat(products.getContent())
+                .extracting(ProductSearchResponse::name, product -> product.price().intValue())
+                .containsExactly(
+                        Tuple.tuple("상품1", 10_000),
+                        Tuple.tuple("상품2", 20_000),
+                        Tuple.tuple("상품3", 30_000)
+                );
+
+        // DB 조회 후 캐시에 적용되었는 지 테스트
+        String key = PRODUCTS_CACHE_KEY_PREFIX + pageable.getPageNumber() + ":" + pageable.getPageSize();
+
+        PageWrapper<ProductSearchResponse> cachedData = (PageWrapper<ProductSearchResponse>) redisTemplate.opsForValue().get(key);
+
+        assertThat(cachedData.getContent())
+                .extracting(ProductSearchResponse::name, product -> product.price().intValue())
+                .containsExactly(
+                        Tuple.tuple("상품1", 10_000),
+                        Tuple.tuple("상품2", 20_000),
+                        Tuple.tuple("상품3", 30_000)
                 );
     }
 
