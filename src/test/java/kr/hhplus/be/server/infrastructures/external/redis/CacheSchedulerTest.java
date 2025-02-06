@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.hhplus.be.server.domain.coupon.Coupon;
+import kr.hhplus.be.server.domain.coupon.UserCoupon;
+import kr.hhplus.be.server.domain.coupon.UserCouponRepository;
 import kr.hhplus.be.server.domain.coupon.enums.CouponType;
 import kr.hhplus.be.server.domain.order.OrderService;
 import kr.hhplus.be.server.domain.order.dto.OrderTopSearchResult;
@@ -50,6 +52,9 @@ class CacheSchedulerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private UserCouponRepository userCouponRepository;
+
     @Test
     @DisplayName("상위 주문 상품을 캐싱한다.")
     void cacheTopOrderProducts() throws JsonProcessingException {
@@ -83,6 +88,7 @@ class CacheSchedulerTest {
 
 
     @Test
+    @DisplayName("선착순 쿠폰 발급 요청을 배치로 처리한다.")
     void testCouponBatchProcess() {
         // given
         Coupon coupon = testDataBuilder.createCoupon("쿠폰1", CouponType.FIXED, 30, 10_000, null);
@@ -106,6 +112,14 @@ class CacheSchedulerTest {
         // 원래 요청한 발급 목록이 삭제되었는지 확인
         Set<Object> remainingRequests = redisTemplate.opsForZSet().range(couponKey, 0, -1);
         assertThat(remainingRequests).isEmpty();
+
+        List<UserCoupon> userCoupons = userCouponRepository.findByUserId(1001L);
+        assertThat(userCoupons).hasSize(1);
+        assertThat(userCoupons.getFirst().getCouponId()).isEqualTo(couponId);
+
+        List<UserCoupon> userCoupons2 = userCouponRepository.findByUserId(1002L);
+        assertThat(userCoupons2).hasSize(1);
+        assertThat(userCoupons2.getFirst().getCouponId()).isEqualTo(couponId);
     }
 
 }
