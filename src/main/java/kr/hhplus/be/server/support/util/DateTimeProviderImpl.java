@@ -10,4 +10,9 @@ public class DateTimeProviderImpl implements DateTimeProvider {
     public LocalDateTime getLocalDateTimeNow() {
         return LocalDateTime.now();
     }
+
+    @Override
+    public Long getCurrentTimestamp() {
+        return System.currentTimeMillis();
+    }
 }

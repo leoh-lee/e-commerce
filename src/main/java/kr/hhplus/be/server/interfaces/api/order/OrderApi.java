@@ -47,5 +47,5 @@ public interface OrderApi {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "500", description = "상위 상품 조회 실패", content = @Content(mediaType = "application/json",
                     examples = @ExampleObject(value = "{ \"code\": \"5101\", \"message\": \"상위 상품 조회 실패\" }")))
     })
-    ApiResponse<List<OrderTopSearchResponse>> searchProductsTop5(@RequestParam Integer topCount);
+    ApiResponse<List<OrderTopSearchResponse>> searchProductsTop5();
 }

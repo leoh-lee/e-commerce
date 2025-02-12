@@ -19,10 +19,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
+import static kr.hhplus.be.server.application.coupon.CouponFacade.COUPONS_ISSUE_REQUESTS_KEY_PREFIX;
 import static org.assertj.core.api.Assertions.*;
 
 class CouponFacadeIntegrationTest extends IntegrationTest {
@@ -44,6 +48,9 @@ class CouponFacadeIntegrationTest extends IntegrationTest {
 
     @Autowired
     private DataPlatform dataPlatform;
+
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Nested
     @DisplayName("쿠폰 발급")
@@ -119,6 +126,30 @@ class CouponFacadeIntegrationTest extends IntegrationTest {
 
             // then
             assertThat(testDataPlatform.getSentCount()).isEqualTo(originSendCount + 1);
+        }
+
+        @Test
+        @DisplayName("비동기 쿠폰 발급 시 Redis에 사용자 ID를 값으로, 타임스탬프를 score로 하여 저장된다.")
+        void issueCouponAsync_thenAddedRedis() {
+            // given
+            User user = testDataBuilder.createUser("test");
+            Coupon coupon = testDataBuilder.createCoupon("10% 할인 쿠폰", CouponType.PERCENTAGE, 30, 0, 10);
+
+            CouponIssueRequest couponIssueRequest = new CouponIssueRequest(user.getId(), coupon.getId());
+
+            // when
+            couponFacade.issueCouponAsync(couponIssueRequest);
+
+            // then
+            ZSetOperations<String, Object> zSetOperations = redisTemplate.opsForZSet();
+
+            String key = COUPONS_ISSUE_REQUESTS_KEY_PREFIX + coupon.getId();
+
+            Set<Object> range = zSetOperations.range(key, 0, -1);
+            Object value = zSetOperations.popMin(key).getValue();
+
+            assertThat(range).hasSize(1);
+            assertThat(value).isEqualTo(user.getId().intValue());
         }
     }
 

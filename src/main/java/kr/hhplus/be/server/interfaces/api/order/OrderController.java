@@ -35,7 +35,7 @@ public class OrderController implements OrderApi {
 
     @Override
     @GetMapping("/top")
-    public ApiResponse<List<OrderTopSearchResponse>> searchProductsTop5(@RequestParam("topCount") Integer topCount) {
-        return ApiResponse.ok(orderFacade.searchTopOrder(topCount), ResponseCode.SUCCESS_SEARCH_TOP_ORDERS);
+    public ApiResponse<List<OrderTopSearchResponse>> searchProductsTop5() {
+        return ApiResponse.ok(orderFacade.searchTopOrder(), ResponseCode.SUCCESS_SEARCH_TOP_ORDERS);
     }
 }
