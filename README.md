@@ -28,3 +28,6 @@ API 명세서는 [여기](docs/apiSpec.md)에서 확인할 수 있습니다.
 
 ### 5. 동시성 제어 보고서
 [링크](docs/concurrency.md)
+
+### 6. Redis 사용 보고서
+[링크](docs/redis.md)
