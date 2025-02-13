@@ -50,6 +50,7 @@ public class OrderFacade {
     private final RedisTemplate<String, Object> redisTemplate;
     private final CacheScheduler cacheScheduler;
     private final ObjectMapper objectMapper;
+    private final OrderEventPublisher orderEventPublisher;
 
     @Transactional
     public OrderResponse order(OrderRequest orderRequest) {
@@ -99,7 +100,7 @@ public class OrderFacade {
         OrderResult orderResult = orderService.order(orderDto);
 
         // 6. 데이터 플랫폼 전송
-        dataPlatform.send(new DataPlatformSendRequest<>(userId, RequestType.ORDER, dateTimeProvider.getLocalDateTimeNow(), orderResult));
+        orderEventPublisher.success(new OrderSuccessEvent(orderResult.orderId(), orderResult.userId(), null));
 
         return OrderResponse.from(orderResult);
     }
