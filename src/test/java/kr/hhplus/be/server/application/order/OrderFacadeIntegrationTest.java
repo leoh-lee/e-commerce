@@ -267,7 +267,7 @@ class OrderFacadeIntegrationTest extends IntegrationTest{
                 .containsExactly(orderResponse.id(), user.getId(), userCoupon.getId());
 
         try {
-            Thread.sleep(1000);
+            Thread.sleep(2000);
             assertThat(testDataPlatform.getSentCount()).isEqualTo(platformSentCount + 1);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
