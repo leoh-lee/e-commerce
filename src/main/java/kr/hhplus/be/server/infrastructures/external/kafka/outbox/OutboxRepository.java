@@ -9,4 +9,6 @@ public interface OutboxRepository {
     int updateStatusById(Long id, OutboxStatus outboxStatus);
 
     List<Outbox> findByTopicContainingAndStatus(String topic, OutboxStatus outboxStatus);
+
+    List<Outbox> findByTopicContainingAndStatusNotSuccess(String topic);
 }

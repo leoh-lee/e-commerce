@@ -13,6 +13,9 @@ import java.util.List;
 public interface OutboxJpaRepository extends JpaRepository<Outbox, Long> {
     List<Outbox> findByTopicContainingAndStatus(String topic, OutboxStatus status);
 
+    @Query("SELECT o FROM Outbox o WHERE o.topic = :topic AND o.status != 'SUCCESS'")
+    List<Outbox> findByTopicContainingAndStatusNotSuccess(@Param("topic") String topic);
+
     @Transactional
     @Modifying
     @Query("UPDATE Outbox o SET o.status = :status WHERE o.id = :id")

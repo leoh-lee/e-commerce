@@ -28,4 +28,9 @@ public class OutboxRepositoryImpl implements OutboxRepository {
     public List<Outbox> findByTopicContainingAndStatus(String topic, OutboxStatus status) {
         return outboxJpaRepository.findByTopicContainingAndStatus(topic, status);
     }
+
+    @Override
+    public List<Outbox> findByTopicContainingAndStatusNotSuccess(String topic) {
+        return outboxJpaRepository.findByTopicContainingAndStatusNotSuccess(topic);
+    }
 }
