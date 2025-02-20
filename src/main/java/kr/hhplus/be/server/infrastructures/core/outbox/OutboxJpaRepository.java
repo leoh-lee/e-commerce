@@ -13,7 +13,7 @@ import java.util.List;
 public interface OutboxJpaRepository extends JpaRepository<Outbox, Long> {
     List<Outbox> findByTopicContainingAndStatus(String topic, OutboxStatus status);
 
-    @Query("SELECT o FROM Outbox o WHERE o.topic = :topic AND o.status != 'SUCCESS'")
+    @Query("SELECT o FROM Outbox o WHERE o.topic = :topic AND o.status != 'SUCCESS' ORDER BY o.createdAt ASC")
     List<Outbox> findByTopicContainingAndStatusNotSuccess(@Param("topic") String topic);
 
     @Transactional
