@@ -48,9 +48,10 @@ spring:
         format_sql: true  # SQL 포맷팅
 
 ---
-spring.config.activate.on-profile: test
-
 spring:
+  config:
+    activate:
+      on-profile: test
   jpa:
     show-sql: true
     hibernate:
@@ -58,3 +59,23 @@ spring:
     properties:
       hibernate:
         format_sql: true  # SQL 포맷팅
+
+  sql:
+    init:
+      mode: always
+
+  kafka:
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+    consumer:
+      group-id: hhplus-consumer-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+    listener:
+      ack-mode: batch
+      missing-topics-fatal: false
+    properties:
+      spring.json.trusted.packages: "*"
