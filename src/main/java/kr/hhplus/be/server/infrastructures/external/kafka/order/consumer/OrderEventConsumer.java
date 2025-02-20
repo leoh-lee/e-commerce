@@ -14,7 +14,7 @@ public class OrderEventConsumer {
 
     private final DataPlatform dataPlatform;
 
-    @KafkaListener(topics = "order-create", groupId = "order-create-group")
+    @KafkaListener(topics = "order_create", groupId = "order_create_group")
     public void listenOrderEvents(OrderCreatedEvent event) {
         DataPlatformSendRequest<Object> sendRequest = new DataPlatformSendRequest<>(event.userId(), RequestType.ORDER, event.timestamp(), event);
         dataPlatform.send(sendRequest);

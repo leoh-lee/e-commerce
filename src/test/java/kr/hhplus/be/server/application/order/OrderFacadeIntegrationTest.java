@@ -5,6 +5,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import kr.hhplus.be.server.domain.order.Order;
+import kr.hhplus.be.server.infrastructures.external.kafka.order.producer.OrderEventProducer;
+import kr.hhplus.be.server.infrastructures.external.kafka.outbox.Outbox;
+import kr.hhplus.be.server.infrastructures.external.kafka.outbox.OutboxRepository;
+import kr.hhplus.be.server.infrastructures.external.kafka.outbox.OutboxStatus;
 import kr.hhplus.be.server.interfaces.api.order.response.OrderSearchResponse;
 import kr.hhplus.be.server.support.TestDataPlatform;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,7 +29,6 @@ import kr.hhplus.be.server.domain.order.dto.OrderProductDto;
 import kr.hhplus.be.server.domain.order.dto.OrderSearchResult;
 import kr.hhplus.be.server.domain.product.Product;
 import kr.hhplus.be.server.domain.product.ProductService;
-import kr.hhplus.be.server.domain.product.ProductStock;
 import kr.hhplus.be.server.domain.product.dto.ProductSearchResult;
 import kr.hhplus.be.server.domain.product.exception.ProductNotFoundException;
 import kr.hhplus.be.server.domain.product.exception.StockNotEnoughException;
@@ -37,11 +40,13 @@ import kr.hhplus.be.server.interfaces.api.order.request.OrderRequest;
 import kr.hhplus.be.server.interfaces.api.order.response.OrderResponse;
 import kr.hhplus.be.server.support.IntegrationTest;
 import kr.hhplus.be.server.support.TestDataBuilder;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 import static org.assertj.core.api.Assertions.*;
 
+@Import(OrderEventProducer.class)
 class OrderFacadeIntegrationTest extends IntegrationTest{
 
     @Autowired
@@ -61,6 +66,9 @@ class OrderFacadeIntegrationTest extends IntegrationTest{
 
     @Autowired
     private TestDataBuilder testDataBuilder;
+
+    @Autowired
+    private OutboxRepository outboxRepository;
 
     private User user;
 
@@ -264,6 +272,30 @@ class OrderFacadeIntegrationTest extends IntegrationTest{
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Test
+    @DisplayName("주문이 성공하면 Outbox에 이벤트가 저장된다.")
+    void order_whenSuccess_thenSaveOutboxWithPending() {
+        // given
+        Coupon coupon = testDataBuilder.createCoupon("10,000원 할인쿠폰", CouponType.FIXED, 1, 10_000, null);
+        UserCoupon userCoupon = testDataBuilder.createUserCoupon(user.getId(), coupon.getId(), LocalDateTime.now().plusDays(5));
+
+        List<OrderProductsRequest> orderProductsRequests = List.of(
+                new OrderProductsRequest(product.getId(), 1)
+        );
+
+        OrderRequest orderRequest = createOrderRequestWithCoupon(user.getId(), userCoupon.getId(), orderProductsRequests);
+
+        // when
+        OrderResponse orderResponse = orderFacade.order(orderRequest);
+
+        // then
+        Long orderId = orderResponse.id();
+        List<Outbox> orderCreateOutbox = outboxRepository.findByTopicContainingAndStatus("order_create", OutboxStatus.SUCCESS);
+
+        assertThat(orderCreateOutbox).isNotEmpty();
+        assertThat(orderCreateOutbox.getFirst().getAggregateId()).isEqualTo(String.valueOf(orderId));
     }
 
     @Test
