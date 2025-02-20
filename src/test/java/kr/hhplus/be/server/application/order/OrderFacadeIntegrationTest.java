@@ -42,7 +42,7 @@ import org.springframework.data.domain.PageRequest;
 
 import static org.assertj.core.api.Assertions.*;
 
-class OrderFacadeIntegrationTest extends IntegrationTest{
+class OrderFacadeIntegrationTest extends IntegrationTest {
 
     @Autowired
     private OrderFacade orderFacade;
@@ -258,12 +258,7 @@ class OrderFacadeIntegrationTest extends IntegrationTest{
                 .usingComparatorForType(BigDecimal::compareTo, BigDecimal.class)
                 .containsExactly(orderResponse.id(), user.getId(), userCoupon.getId());
 
-        try {
-            Thread.sleep(1000);
-            assertThat(testDataPlatform.getSentCount()).isEqualTo(platformSentCount + 1);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        assertThat(testDataPlatform.getSentCount()).isEqualTo(platformSentCount + 1);
     }
 
     @Test
