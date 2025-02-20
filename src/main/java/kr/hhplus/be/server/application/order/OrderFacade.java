@@ -45,7 +45,6 @@ public class OrderFacade {
     private final OrderService orderService;
     private final ProductService productService;
     private final CouponService couponService;
-    private final DataPlatform dataPlatform;
     private final DateTimeProvider dateTimeProvider;
     private final RedisTemplate<String, Object> redisTemplate;
     private final CacheScheduler cacheScheduler;
@@ -100,7 +99,7 @@ public class OrderFacade {
         OrderResult orderResult = orderService.order(orderDto);
 
         // 6. 데이터 플랫폼 전송
-        orderEventPublisher.success(new OrderSuccessEvent(orderResult.orderId(), orderResult.userId(), null));
+        orderEventPublisher.success(new OrderSuccessEvent(orderResult.orderId(), orderResult.userId(), orderResult.couponId(), orderResult.finalPrice(),  dateTimeProvider.getLocalDateTimeNow()));
 
         return OrderResponse.from(orderResult);
     }
