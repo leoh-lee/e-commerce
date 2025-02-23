@@ -2,10 +2,11 @@ package kr.hhplus.be.server.infrastructures.external.kafka.scheduler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import kr.hhplus.be.server.infrastructures.external.kafka.config.KafkaTopicsProperties;
 import kr.hhplus.be.server.infrastructures.external.kafka.order.OrderCreatedEvent;
 import kr.hhplus.be.server.infrastructures.external.kafka.order.producer.OrderEventProducer;
 import kr.hhplus.be.server.infrastructures.external.kafka.outbox.Outbox;
-import kr.hhplus.be.server.infrastructures.external.kafka.outbox.OutboxRepository;
+import kr.hhplus.be.server.infrastructures.external.kafka.outbox.OutboxService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -19,15 +20,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class KafkaScheduler {
 
-    private static final String ORDER_CREATE_TOPIC = "order_create";
-
+    private final KafkaTopicsProperties topicsProperties;
     private final OrderEventProducer orderEventProducer;
-    private final OutboxRepository outboxRepository;
+    private final OutboxService outboxService;
 
     @Scheduled(fixedRate = 5000)
     @Transactional
     public void sendOutboxMessage() {
-        List<Outbox> notSuccessEvents = outboxRepository.findByTopicContainingAndStatusNotSuccess(ORDER_CREATE_TOPIC);
+        String orderCreatedTopic = topicsProperties.getOrder().getCreated();
+        List<Outbox> notSuccessEvents = outboxService.getByTopicContainingAndStatusNotSuccess(orderCreatedTopic);
 
         for (Outbox outbox : notSuccessEvents) {
             if (outbox.isRetryLimit()) {
@@ -39,7 +40,7 @@ public class KafkaScheduler {
             try {
                 OrderCreatedEvent orderCreatedEvent = objectMapper.readValue(payload, OrderCreatedEvent.class);
 
-                orderEventProducer.publishOrderEvent(ORDER_CREATE_TOPIC, orderCreatedEvent);
+                orderEventProducer.publishOrderEvent(orderCreatedTopic, orderCreatedEvent);
 
                 outbox.published();
             } catch (JsonProcessingException e) {

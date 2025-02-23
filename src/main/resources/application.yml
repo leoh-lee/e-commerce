@@ -33,6 +33,11 @@ springdoc:
   swagger-ui:
     display-request-duration: true      # Tryout 시 요청에 걸린 시간 출력
     operations-sorter: method           # Http Method 기준으로 정렬
+myapp:
+  kafka:
+    topics:
+      order:
+        created: "order-default-created"
 ---
 spring.config.activate.on-profile: local
 
@@ -46,7 +51,11 @@ spring:
     properties:
       hibernate:
         format_sql: true  # SQL 포맷팅
-
+myapp:
+  kafka:
+    topics:
+      order:
+        created: "order-local-created"
 ---
 spring:
   config:
@@ -79,3 +88,8 @@ spring:
       missing-topics-fatal: false
     properties:
       spring.json.trusted.packages: "*"
+myapp:
+  kafka:
+    topics:
+      order:
+        created: "order-test-created"

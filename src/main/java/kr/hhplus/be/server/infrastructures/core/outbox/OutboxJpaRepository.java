@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface OutboxJpaRepository extends JpaRepository<Outbox, Long> {
     List<Outbox> findByTopicContainingAndStatus(String topic, OutboxStatus status);
@@ -20,4 +21,6 @@ public interface OutboxJpaRepository extends JpaRepository<Outbox, Long> {
     @Modifying
     @Query("UPDATE Outbox o SET o.status = :status WHERE o.id = :id")
     int updateStatusById(@Param("id") Long id, @Param("status") OutboxStatus outboxStatus);
+
+    Optional<Outbox> findByAggregateId(String aggregateId);
 }

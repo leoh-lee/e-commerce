@@ -1,8 +1,11 @@
 package kr.hhplus.be.server.infrastructures.core.outbox;
 
+import kr.hhplus.be.server.domain.common.exception.ResourceNotFoundException;
 import kr.hhplus.be.server.infrastructures.external.kafka.outbox.Outbox;
+import kr.hhplus.be.server.infrastructures.external.kafka.outbox.OutboxNotFoundException;
 import kr.hhplus.be.server.infrastructures.external.kafka.outbox.OutboxRepository;
 import kr.hhplus.be.server.infrastructures.external.kafka.outbox.OutboxStatus;
+import kr.hhplus.be.server.support.http.response.ResponseCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -32,5 +35,10 @@ public class OutboxRepositoryImpl implements OutboxRepository {
     @Override
     public List<Outbox> findByTopicContainingAndStatusNotSuccess(String topic) {
         return outboxJpaRepository.findByTopicContainingAndStatusNotSuccess(topic);
+    }
+
+    @Override
+    public Outbox findByAggregateId(String aggregateId) {
+        return outboxJpaRepository.findByAggregateId(aggregateId).orElseThrow();
     }
 }

@@ -7,7 +7,7 @@ import java.util.List;
 import kr.hhplus.be.server.domain.order.Order;
 import kr.hhplus.be.server.infrastructures.external.kafka.order.producer.OrderEventProducer;
 import kr.hhplus.be.server.infrastructures.external.kafka.outbox.Outbox;
-import kr.hhplus.be.server.infrastructures.external.kafka.outbox.OutboxRepository;
+import kr.hhplus.be.server.infrastructures.external.kafka.outbox.OutboxService;
 import kr.hhplus.be.server.infrastructures.external.kafka.outbox.OutboxStatus;
 import kr.hhplus.be.server.interfaces.api.order.response.OrderSearchResponse;
 import kr.hhplus.be.server.support.TestDataPlatform;
@@ -68,7 +68,7 @@ class OrderFacadeIntegrationTest extends IntegrationTest{
     private TestDataBuilder testDataBuilder;
 
     @Autowired
-    private OutboxRepository outboxRepository;
+    private OutboxService outboxService;
 
     private User user;
 
@@ -292,10 +292,9 @@ class OrderFacadeIntegrationTest extends IntegrationTest{
 
         // then
         Long orderId = orderResponse.id();
-        List<Outbox> orderCreateOutbox = outboxRepository.findByTopicContainingAndStatus("order_create", OutboxStatus.SUCCESS);
+        Outbox orderCreateOutbox = outboxService.getOutboxByAggregateId(orderId);
 
-        assertThat(orderCreateOutbox).isNotEmpty();
-        assertThat(orderCreateOutbox.getFirst().getAggregateId()).isEqualTo(String.valueOf(orderId));
+        assertThat(orderCreateOutbox.getAggregateId()).isEqualTo(String.valueOf(orderId));
     }
 
     @Test

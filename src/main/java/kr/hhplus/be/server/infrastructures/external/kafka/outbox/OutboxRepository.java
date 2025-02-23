@@ -11,4 +11,6 @@ public interface OutboxRepository {
     List<Outbox> findByTopicContainingAndStatus(String topic, OutboxStatus outboxStatus);
 
     List<Outbox> findByTopicContainingAndStatusNotSuccess(String topic);
+
+    Outbox findByAggregateId(String aggregateId);
 }
