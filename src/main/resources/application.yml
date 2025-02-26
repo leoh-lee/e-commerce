@@ -11,7 +11,6 @@ spring:
       maximum-pool-size: 10
       connection-timeout: 10000
       max-lifetime: 60000
-    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     open-in-view: false
     generate-ddl: false
@@ -23,10 +22,6 @@ spring:
       hibernate.jdbc.time_zone: UTC
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
-  data:
-    redis:
-      port: 6379
-      host: localhost
 springdoc:
   default-consumes-media-type: application/json;charset=UTF-8
   default-produces-media-type: application/json;charset=UTF-8
@@ -44,13 +39,36 @@ spring.config.activate.on-profile: local
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3307/hhplus?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    username: root
+    password: root
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: validate
     properties:
       hibernate:
         format_sql: true  # SQL 포맷팅
+  data:
+    redis:
+      port: 6379
+      host: localhost
+  kafka:
+    bootstrap-servers: localhost:10002, localhost:10003, localhost:10004
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+    consumer:
+      group-id: hhplus-consumer-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+    listener:
+      ack-mode: batch
+      missing-topics-fatal: false
+    properties:
+      spring.json.trusted.packages: "*"
 myapp:
   kafka:
     topics:

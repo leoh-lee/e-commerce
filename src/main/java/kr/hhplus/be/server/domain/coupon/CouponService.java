@@ -62,7 +62,7 @@ public class CouponService {
 
         coupon.decreaseStock();
 
-        UserCoupon userCoupon = new UserCoupon(userId, couponId, UserCouponStatus.ISSUED, dateTimeProvider.getLocalDateTimeNow(), null);
+        UserCoupon userCoupon = new UserCoupon(userId, couponId, UserCouponStatus.ISSUED, dateTimeProvider.getLocalDateTimeNow().plusMonths(12), null);
         userCouponRepository.save(userCoupon);
 
         return new CouponIssueResult(

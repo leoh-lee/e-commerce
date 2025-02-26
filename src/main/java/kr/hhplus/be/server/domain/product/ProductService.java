@@ -73,7 +73,7 @@ public class ProductService {
     }
 
     @DistributedLock(key = "'order_product_'.concat(#orderProductsDto.productId())")
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional
     public void decreaseProductStock(OrderProductDto orderProductsDto) {
         Product product = productRepository.findById(orderProductsDto.productId());
         int originalStock = product.getStock().getStock();
