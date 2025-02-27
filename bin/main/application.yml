@@ -1,0 +1,58 @@
+spring:
+  application:
+    name: hhplus
+  profiles:
+    active: local
+  datasource:
+    name: HangHaePlusDataSource
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      maximum-pool-size: 3
+      connection-timeout: 10000
+      max-lifetime: 60000
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    open-in-view: false
+    generate-ddl: false
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate.timezone.default_storage: NORMALIZE_UTC
+      hibernate.jdbc.time_zone: UTC
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+springdoc:
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  swagger-ui:
+    display-request-duration: true      # Tryout 시 요청에 걸린 시간 출력
+    operations-sorter: method           # Http Method 기준으로 정렬
+---
+spring.config.activate.on-profile: local
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/commerce_toy?serverTimezone=UTC
+    username: root
+    password: lhm52030406
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true  # SQL 포맷팅
+
+---
+spring.config.activate.on-profile: test
+
+spring:
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true  # SQL 포맷팅

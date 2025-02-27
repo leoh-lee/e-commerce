@@ -38,6 +38,10 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	implementation 'org.redisson:redisson-spring-boot-starter:3.41.0'
 
+		// Actuator
+		implementation 'org.springframework.boot:spring-boot-starter-actuator:3.4.2'
+		runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+
 	// kafka
 	implementation 'org.springframework.kafka:spring-kafka'
 
